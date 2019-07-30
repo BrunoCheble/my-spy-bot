@@ -1,5 +1,3 @@
-const qs = require('qs');
-const axios = require('axios');
 const Filter = require('./Filter');
 const Site = require('./Site');
 const Email = require('./Email');
@@ -40,4 +38,4 @@ class Bot {
     }
 }
 
-module.exports = Schedule;
+module.exports = Bot;
