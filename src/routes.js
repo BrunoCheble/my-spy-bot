@@ -9,7 +9,7 @@ const routes = new Router();
 routes.post('/start', ServiceController.start);
 
 routes.post('/services', ServiceController.store);
-routes.get('/services', ServiceController.find);
+routes.get('/services/:id', ServiceController.find);
 
 routes.post('/filters', FilterController.store);
 routes.get('/filters', FilterController.find);

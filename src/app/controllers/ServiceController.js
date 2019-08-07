@@ -4,8 +4,8 @@ const Bot = require('../models/Bot');
 class ServiceController {
 
     async find(req, res) {
-        const service = await Service.find(req.body);
-        return res.json(service);
+        const service = await Service.findOne(req.query.id);
+        return res.json({...service, interval: []});
     }
 
     async store(req, res) {
