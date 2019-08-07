@@ -5,7 +5,9 @@ class ServiceController {
 
     async find(req, res) {
         const service = await Service.findOne(req.query.id);
-        return res.json({...service, interval: []});
+        const filters = await filters.find({ _serviceId: service.id });
+
+        return res.json({...service, filters });
     }
 
     async store(req, res) {
