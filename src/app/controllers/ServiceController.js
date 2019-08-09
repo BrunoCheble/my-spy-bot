@@ -14,11 +14,16 @@ class ServiceController {
     async store(req, res) {
 
         const repeat = true;
+        let password = {};
 
         while (repeat) {
-            const password = { password: Math.random().toString(36).slice(-6) };
+            password = { password: Math.random().toString(36).slice(-6) };
+            console.log(password);
             repeat = await Service.exists(password);
+            console.log(repeat);
         }
+
+        console.log(password);
 
         const service = await Service.create({ ...req.body, password });
         return res.json(service);
