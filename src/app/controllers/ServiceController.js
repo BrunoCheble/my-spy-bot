@@ -15,7 +15,7 @@ class ServiceController {
         }
         
         const filters = await Filter.find({ _serviceId: service.id });
-        return res.json({ ... service, filters });
+        return res.json({ ... service._doc, filters });
     }
 
     async store(req, res) {
