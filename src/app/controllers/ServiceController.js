@@ -1,5 +1,6 @@
 const Service = require('../models/Service');
 const Filter = require('../models/Filter');
+const Email = require('../models/Email');
 const Bot = require('../models/Bot');
 
 class ServiceController {
@@ -13,19 +14,20 @@ class ServiceController {
 
     async store(req, res) {
 
-        const repeat = true;
+        const data = req.body;
+
+        let repeat = true;
         let password = {};
 
         while (repeat) {
-            password = { password: Math.random().toString(36).slice(-6) };
-            console.log(password);
-            repeat = await Service.exists(password);
-            console.log(repeat);
+            password = Math.random().toString(36).slice(-6).toLocaleUpperCase();
+            repeat = await Service.exists({ password });
         }
 
-        console.log(password);
+        const service = await Service.create({ ...data, password });
 
-        const service = await Service.create({ ...req.body, password });
+        Email.sendMail(data.emails,'Número do seu Robô',password);
+        
         return res.json(service);
     }
 
