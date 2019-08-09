@@ -49,14 +49,14 @@ class Email {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'roboolx2@gmail.com',
-                pass: '1',
+                user: process.env.FROMEMAIL,
+                pass: process.env.PASSEMAIL,
             },
         });
 
         transporter.sendMail(
             {
-                from: 'roboolx2@gmail.com',
+                from: process.env.FROMEMAIL,
                 to,
                 subject,
                 html: `<html><body>${html}</body></html>`,
