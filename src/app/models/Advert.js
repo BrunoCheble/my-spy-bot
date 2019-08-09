@@ -5,6 +5,7 @@ const AdvertSchema = new mongoose.Schema(
         link: String,
         last_price: Number,
         _serviceId: mongoose.Schema.Types.ObjectId,
+        _filterId: mongoose.Schema.Types.ObjectId,
     },
     {
         timestamps: true,

@@ -29,6 +29,7 @@ class Bot {
             const response = await Site.request(filter);
 
             Email.send(
+                filter.id,
                 service.id,
                 service.emails,
                 response.title,
