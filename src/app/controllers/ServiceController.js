@@ -18,7 +18,7 @@ class ServiceController {
         let filters = await Filter.find({ _serviceId: service.id });
 
         filters = await Promise.all(filters.map(async filter => ({
-            ...filter,
+            ...filter._doc,
             adverts: await Advert.find({ _filterId: filter.id })
         })));
 
