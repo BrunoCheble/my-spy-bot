@@ -1,21 +1,28 @@
 const Service = require('../models/Service');
 const Filter = require('../models/Filter');
 const Email = require('../models/Email');
+const Advert = require('../models/Advert');
 const Bot = require('../models/Bot');
 
 class ServiceController {
 
     async find(req, res) {
 
-        const service = await Service.findOne({ password : req.params.id.toLocaleUpperCase() });
+        const service = await Service.findOne({ password: req.params.id.toLocaleUpperCase() });
 
-        if(service == null) {
+        if (service == null) {
             res.status(500);
             return res.json({ error: 'Service not found' });
         }
-        
-        const filters = await Filter.find({ _serviceId: service.id });
-        return res.json({ ... service._doc, filters });
+
+        let filters = await Filter.find({ _serviceId: service.id });
+
+        filters = await Promise.all(filters.map(async filter => ({
+            ...filter,
+            adverts: await Advert.find({ _filterId: filter.id })
+        })));
+
+        return res.json({ ...service._doc, filters });
     }
 
     async store(req, res) {
@@ -32,8 +39,8 @@ class ServiceController {
 
         const service = await Service.create({ ...data, password });
 
-        Email.sendMail(data.emails,'Número do seu Robô',password);
-        
+        Email.sendMail(data.emails, 'Número do seu Robô', password);
+
         return res.json(service);
     }
 

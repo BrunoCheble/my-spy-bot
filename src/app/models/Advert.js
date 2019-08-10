@@ -4,8 +4,14 @@ const AdvertSchema = new mongoose.Schema(
     {
         link: String,
         last_price: Number,
-        _serviceId: mongoose.Schema.Types.ObjectId,
-        _filterId: mongoose.Schema.Types.ObjectId,
+        _serviceId: {
+            type: mongoose.Schema.Types.ObjectId,
+            index: true,
+        },
+        _filterId: {
+            type: mongoose.Schema.Types.ObjectId,
+            index: true,
+        },
     },
     {
         timestamps: true,
