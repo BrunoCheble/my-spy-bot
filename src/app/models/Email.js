@@ -23,10 +23,15 @@ class Email {
 
     static async send(_filterId, _serviceId, emails, subject, adverts) {
         
+        console.log('--> Anúncios Encontrados: '+adverts.length);
         adverts = await this.removeDuplicates(adverts);
+        
+        console.log('--> Anúncios (não repetidos): '+adverts.length);
 
         const news_adverts = await this.cleanEmails(adverts, _serviceId, _filterId);
 
+        console.log('--> Novos anúncios: '+news_adverts.length);
+        
         if (news_adverts.length > 0) {
             this.sendMail(
                 emails,
