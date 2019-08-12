@@ -3,10 +3,12 @@ const { filterAsync } = require('node-filter-async');
 const Advert = require('./Advert');
 
 class Email {
-    static async newAdvert(link, last_price, _serviceId, _filterId) {
+    static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
         const data = {
             _filterId,
             _serviceId,
+            thumb,
+            title,
             link,
             last_price,
         };
@@ -37,7 +39,7 @@ class Email {
         const result = await filterAsync(
             adverts,
             async advert =>
-                await this.newAdvert(advert.link, advert.price, _serviceId, _filterId)
+                await this.newAdvert(advert.thumb, advert.title, advert.link, advert.price, _serviceId, _filterId)
         );
 
         console.log(result);

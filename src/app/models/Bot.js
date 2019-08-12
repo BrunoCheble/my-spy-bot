@@ -9,7 +9,7 @@ class Bot {
         // Busca todos de acordo o intervalo da requisição
         const services = await Service.find({ interval });
 
-        console.log('Start Run ' + services.lenght);
+        console.log('Start Run ' + services.length);
         services.map(async service => await this.task(service));
     }
 

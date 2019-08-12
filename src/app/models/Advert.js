@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const AdvertSchema = new mongoose.Schema(
     {
         link: String,
-        last_price: Number,
+        thumb: String,
+        title: String,
+        last_price: String,
         _serviceId: {
             type: mongoose.Schema.Types.ObjectId,
             index: true,

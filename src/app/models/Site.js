@@ -7,7 +7,7 @@ class Site {
         let adverts = [];
         switch (filter.url) {
             case 'olx':
-                adverts = await this.olx(filter.filter);
+                adverts = await this.olx(filter.filter, []);
                 break;
             case 'imovirtual':
                 adverts = await this.imovirtual(filter.filter);
@@ -18,7 +18,7 @@ class Site {
         return { title: filter.title, adverts };
     }
 
-    static async olx(filter) {
+    static async olx(filter, responseToEmail) {
         const request = async _filter => {
             try {
                 return await axios.post(
@@ -33,8 +33,6 @@ class Site {
         const response = await request(filter);
         const dom = new JSDOM(response.data);
 
-        const responseToEmail = [];
-
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
@@ -47,12 +45,24 @@ class Site {
             .forEach(item => {
                 responseToEmail.push({
                     html: item.outerHTML,
-                    price: 0,
+                    title: item.querySelector('.title-cell h3 strong') !== null ? item.querySelector('.title-cell h3 strong').textContent : '',
+                    price: item.querySelector('.price strong') !== null ? item.querySelector('.price strong').textContent : '',
+                    thumb: item.querySelector('img') !== null ? item.querySelector('img').getAttribute('src') : '',
                     link: item
                         .querySelector('.detailsLink')
                         .getAttribute('href'),
                 });
             });
+
+        const nextPage = dom.window.document.querySelector('[data-cy="page-link-next"]');
+        const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
+
+        if(linkNextPage !== null) {
+            const search = "&page=";
+            const page = linkNextPage.slice(parseInt(linkNextPage.indexOf(search))+parseInt(search.length));
+            
+            return await this.olx({ ... filter, page }, responseToEmail);
+        }
 
         return responseToEmail;
     }
