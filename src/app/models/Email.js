@@ -7,8 +7,6 @@ class Email {
         const data = {
             _filterId,
             _serviceId,
-            thumb,
-            title,
             link,
             last_price,
         };
@@ -16,7 +14,7 @@ class Email {
         const advert = await Advert.findOne(data);
 
         if (advert == null) {
-            await Advert.create(data);
+            await Advert.create({...data, title, thumb});
             return true;
         }
 
