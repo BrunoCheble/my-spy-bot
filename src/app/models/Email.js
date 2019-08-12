@@ -22,6 +22,9 @@ class Email {
     }
 
     static async send(_filterId, _serviceId, emails, subject, adverts) {
+        
+        adverts = await this.removeDuplicates(adverts);
+
         const news_adverts = await this.cleanEmails(adverts, _serviceId, _filterId);
 
         if (news_adverts.length > 0) {
@@ -33,14 +36,24 @@ class Email {
         }
     }
 
+    static async removeDuplicates(adverts) {
+
+        const seen = new Set();
+
+        return adverts.filter(el => {
+            const duplicate = seen.has(el.link);
+            seen.add(el.link);
+            return !duplicate;
+        });
+    }
+
     static async cleanEmails(adverts, _serviceId, _filterId) {
+        
         const result = await filterAsync(
             adverts,
             async advert =>
                 await this.newAdvert(advert.thumb, advert.title, advert.link, advert.price, _serviceId, _filterId)
         );
-
-        console.log(result);
 
         return result;
     }
