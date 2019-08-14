@@ -10,13 +10,14 @@ class Bot {
         // Busca todos de acordo o intervalo da requisição
         const services = await Service.find({ interval });
 
+        const updatedServices = await Service.updateMany({interval},{});
         console.log('Start Run ' + services.length);
         services.map(async service => await this.task(service));
     }
 
     static async task(service) {
 
-        const disabled = await Advert.updateMany({ _serviceId: service.id }, { active: false });
+        const disabledAll = await Advert.updateMany({ _serviceId: service.id }, { active: false });
 
         const filters = await Filter.find({
             _serviceId: service.id,
