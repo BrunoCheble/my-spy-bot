@@ -5,6 +5,9 @@ const { JSDOM } = require('jsdom');
 class Site {
     static async request(filter) {
         let adverts = [];
+
+        console.log(filter.origin);
+        
         switch (filter.origin) {
             case 'olx':
                 adverts = await this.olx(filter.filter, []);
@@ -33,12 +36,16 @@ class Site {
         const response = await request(filter);
         const dom = new JSDOM(response.data);
 
+        console.log('Fez a request');
+
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
         ) {
             return [];
         }
+
+        console.log('Existe anúncio');
 
         dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
