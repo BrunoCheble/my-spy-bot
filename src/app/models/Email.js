@@ -11,8 +11,8 @@ class Email {
             last_price,
         };
 
-        const advert = await Advert.findOne(data);
-
+        const advert = await Advert.findOneAndUpdate(data, { active: true });
+        
         if (advert == null) {
             await Advert.create({...data, title, thumb});
             return true;

@@ -2,6 +2,7 @@ const Filter = require('./Filter');
 const Site = require('./Site');
 const Email = require('./Email');
 const Service = require('./Service');
+const Advert = require('./Advert');
 
 class Bot {
 
@@ -14,6 +15,8 @@ class Bot {
     }
 
     static async task(service) {
+
+        const disabled = await Advert.updateMany({ _serviceId: service.id }, { active: false });
 
         const filters = await Filter.find({
             _serviceId: service.id,
