@@ -5,7 +5,7 @@ const { JSDOM } = require('jsdom');
 class Site {
     static async request(filter) {
         let adverts = [];
-        switch (filter.url) {
+        switch (filter.origin) {
             case 'olx':
                 adverts = await this.olx(filter.filter, []);
                 break;
