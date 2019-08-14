@@ -13,6 +13,7 @@ routes.get('/services/:id', ServiceController.find);
 
 routes.post('/filters', FilterController.store);
 routes.get('/filters', FilterController.find);
+routes.get('/filters/delete/:id', FilterController.delete);
 
 routes.get('/adverts', AdvertController.find);
 
