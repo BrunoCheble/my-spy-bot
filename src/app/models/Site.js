@@ -23,6 +23,7 @@ class Site {
 
     static async olx(filter, responseToEmail) {
         const request = async _filter => {
+            console.log(_filter);
             try {
                 return await axios.post(
                     'https://www.olx.pt/ajax/search/list/',
