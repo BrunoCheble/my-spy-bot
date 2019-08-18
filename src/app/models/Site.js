@@ -38,7 +38,7 @@ class Site {
 
         console.log('Fez a request');
         console.log(filter);
-
+        console.log(response.data);
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
