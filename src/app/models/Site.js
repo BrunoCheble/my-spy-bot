@@ -37,7 +37,7 @@ class Site {
         const dom = new JSDOM(response.data);
 
         console.log('Fez a request');
-        
+        console.log(dom.window.document);
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
@@ -47,7 +47,7 @@ class Site {
 
         console.log('Existe anúncio');
         console.log(dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper').length);
-        
+
         await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
             .forEach(item => {
