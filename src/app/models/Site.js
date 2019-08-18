@@ -7,7 +7,7 @@ class Site {
         let adverts = [];
 
         console.log(filter.origin);
-        
+
         switch (filter.origin) {
             case 'olx':
                 adverts = await this.olx(filter.filter, []);
@@ -36,8 +36,14 @@ class Site {
         const response = await request(filter);
         const dom = new JSDOM(response.data);
 
+        console.log('Aguardar...');
+
+        await new Promise(resolve => {
+            setTimeout(resolve, 2000)
+        });
+
         console.log('Fez a request');
-        console.log(response.data);
+
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
@@ -46,7 +52,7 @@ class Site {
         }
 
         console.log('Existe anúncio');
-        console.log(dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper').length);
+
 
         await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
@@ -65,11 +71,11 @@ class Site {
         const nextPage = dom.window.document.querySelector('[data-cy="page-link-next"]');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
-        if(linkNextPage !== null) {
+        if (linkNextPage !== null) {
             const search = "&page=";
-            const page = linkNextPage.slice(parseInt(linkNextPage.indexOf(search))+parseInt(search.length));
-            
-            return await this.olx({ ... filter, page }, responseToEmail);
+            const page = linkNextPage.slice(parseInt(linkNextPage.indexOf(search)) + parseInt(search.length));
+
+            return await this.olx({ ...filter, page }, responseToEmail);
         }
 
         return responseToEmail;
