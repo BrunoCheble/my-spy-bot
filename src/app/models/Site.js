@@ -37,7 +37,6 @@ class Site {
         const dom = new JSDOM(response.data);
 
         console.log('Fez a request');
-        console.log(response.data);
         
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
@@ -48,7 +47,7 @@ class Site {
 
         console.log('Existe anúncio');
 
-        dom.window.document
+        await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
             .forEach(item => {
                 responseToEmail.push({
