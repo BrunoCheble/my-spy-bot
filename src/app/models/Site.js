@@ -38,7 +38,7 @@ class Site {
 
         console.log('Fez a request');
         console.log(filter);
-        console.log(response.data);
+        
         if (
             dom.window.document.querySelectorAll('.emptyinfo-location')
                 .length === 1
@@ -47,7 +47,6 @@ class Site {
         }
 
         console.log('Existe anúncio');
-        console.log(dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper'));
 
         dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
