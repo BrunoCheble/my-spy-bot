@@ -21,6 +21,10 @@ class Bot {
 
         const filters = await Filter.find({
             _serviceId: service.id,
+            filter: {
+                $exists : true,
+                $ne : ""
+            }
         });
 
         // Generate Interval
@@ -28,6 +32,8 @@ class Bot {
         console.log(`Emails: ${service.emails}`);
         console.log(new Date().toLocaleString());
 
+        console.log(filters.length);
+        
         // Para cada serviço, busca seus respetivos filtros;
         filters.map(async filter => {
             const response = await Site.request(filter);
