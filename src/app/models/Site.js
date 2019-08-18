@@ -47,6 +47,7 @@ class Site {
         }
 
         console.log('Existe anúncio');
+        console.log(dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper'));
 
         dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
