@@ -46,7 +46,8 @@ class Site {
         }
 
         console.log('Existe anúncio');
-
+        console.log(dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper').length);
+        
         await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
             .forEach(item => {
