@@ -79,6 +79,12 @@ class Site {
             return await this.olx({ ...filter, page }, responseToEmail);
         }
 
+        if(responseToEmail.length == 0) {
+            console.log('-------- Início -------');
+            console.log(response.data);
+            console.log('-------- Fim -------');
+        }
+
         return responseToEmail;
     }
 
