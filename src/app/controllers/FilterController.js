@@ -9,8 +9,9 @@ class FilterController {
     }
 
     async store(req, res) {
-        const filter = await Filter.create(req.body);
-        return res.json(filter);
+        //const filter = await Filter.create(req.body);
+        console.log(req);
+        return res.json(req.params);
     }
 
     async delete(req, res) {
