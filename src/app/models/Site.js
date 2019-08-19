@@ -40,7 +40,7 @@ class Site {
         console.log('Aguardar...');
 
         await new Promise(resolve => {
-            setTimeout(resolve, 5000)
+            setTimeout(resolve, 2000)
         });
 
         console.log('Fez a request');
