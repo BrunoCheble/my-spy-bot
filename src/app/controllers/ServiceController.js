@@ -45,14 +45,11 @@ class ServiceController {
     }
 
     async start(req, res) {
-        console.log('???');
-        /*
         const interval = req.headers.interval;
         console.log('Called Start - ' + interval);
 
         const task = await Bot.run(interval);
         return res.json({ message: task });
-        */
     }
 }
 
