@@ -44,6 +44,10 @@ class ServiceController {
         return res.json(service);
     }
 
+    async test(req, res) {
+        return res.json({ working: true });
+    }
+
     async start(req, res) {
         const interval = req.headers.interval;
         console.log('Called Start - ' + interval);

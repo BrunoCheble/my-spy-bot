@@ -6,6 +6,7 @@ const AdvertController = require('./app/controllers/AdvertController');
 
 const routes = new Router();
 
+routes.get('', ServiceController.test);
 routes.post('/start', ServiceController.start);
 
 routes.post('/services', ServiceController.store);
