@@ -19,7 +19,7 @@ class ServiceController {
 
         filters = await Promise.all(filters.map(async filter => ({
             ...filter._doc,
-            adverts: await Advert.find({ _filterId: filter.id }).sort([['createdAt', -1]])
+            adverts: await Advert.find({ _filterId: filter.id }).sort([['active', 1],['createdAt', -1]])
         })));
 
         return res.json({ ...service._doc, filters });
