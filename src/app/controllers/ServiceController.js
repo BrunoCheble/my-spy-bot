@@ -1,4 +1,4 @@
-const push = require('get-push');
+const push = require('git-push');
  
 const Service = require('../models/Service');
 const Filter = require('../models/Filter');
