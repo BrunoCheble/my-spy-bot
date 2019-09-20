@@ -1,3 +1,5 @@
+const push = require('get-push');
+ 
 const Service = require('../models/Service');
 const Filter = require('../models/Filter');
 const Email = require('../models/Email');
@@ -45,6 +47,11 @@ class ServiceController {
     }
 
     async test(req, res) {
+
+        push('./app', 'https://github.com/BrunoCheble/my-spy-bot', function() {
+            console.log('Done!');
+        });
+
         return res.json({ working: true });
     }
 
