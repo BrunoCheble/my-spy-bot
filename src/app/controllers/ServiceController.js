@@ -44,10 +44,7 @@ class ServiceController {
         return res.json(service);
     }
 
-    async test(req, res) {
-
-        const task = await Bot.run(600);
-        
+    async test(req, res) {       
         return res.json({ working: true });
     }
 
