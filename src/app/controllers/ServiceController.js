@@ -1,5 +1,3 @@
-const push = require('git-push');
- 
 const Service = require('../models/Service');
 const Filter = require('../models/Filter');
 const Email = require('../models/Email');
@@ -48,10 +46,8 @@ class ServiceController {
 
     async test(req, res) {
 
-        push('./app', 'https://github.com/BrunoCheble/my-spy-bot', function() {
-            console.log('Done!');
-        });
-
+        const task = await Bot.run(600);
+        
         return res.json({ working: true });
     }
 
