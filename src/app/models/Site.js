@@ -18,6 +18,9 @@ class Site {
             case 'ml':
                 adverts = await this.mercadolivre(filter.url, []);
                 break;
+            case 'olxbr':
+                adverts = await this.olxbr(filter.url, []);
+                break;
             default:
                 break;
         }
@@ -149,7 +152,7 @@ class Site {
 
                 let link = item.querySelector('.item__info-link').getAttribute('href');
                 let page = link.slice(0,parseInt(link.indexOf("&tracking_id")));
-                
+
                 responseToEmail.push({
                     html: item.outerHTML,
                     title: item.querySelector('.main-title') !== null ? item.querySelector('.main-title').textContent.trim() : '',
@@ -160,6 +163,65 @@ class Site {
             });
 
         const nextPage = dom.window.document.querySelector('.andes-pagination__link.prefetch');
+        const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
+
+        if (linkNextPage !== null) {
+            return await this.mercadolivre(linkNextPage, responseToEmail);
+        }
+
+        if (responseToEmail.length == 0) {
+            console.log('-------- Início -------');
+            console.log(response.data);
+            console.log('-------- Fim -------');
+        }
+
+        return responseToEmail;
+    }
+
+    static async olxbr(page, responseToEmail) {
+
+        const request = async _page => {
+            try {
+                return await axios.get(_page);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const response = await request(page);
+        const dom = new JSDOM(response.data);
+
+        console.log('Aguardar...');
+
+        await new Promise(resolve => {
+            setTimeout(resolve, 2000)
+        });
+
+        console.log('Fez a request OLX BR');
+
+        if (
+            dom.window.document.querySelectorAll('#main-ad-list .item:not(.list_native)')
+                .length === 1
+        ) {
+            console.log(response.data);
+            return [];
+        }
+
+        console.log('Existe anúncio');
+
+        await dom.window.document
+            .querySelectorAll('#main-ad-list .item:not(.list_native)')
+            .forEach(item => {
+                responseToEmail.push({
+                    html: item.outerHTML,
+                    thumb: item.querySelector('img') != null ? item.querySelector('img').currentSrc : '',
+                    title: item.querySelector('.OLXad-list-title').outerText.trim(),
+                    url: item.querySelector('a').href,
+                    last_price: item.querySelector('.OLXad-list-price').outerText.trim()
+                });
+            });
+
+        const nextPage = dom.window.document.querySelector('.item.next .link');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
         if (linkNextPage !== null) {
