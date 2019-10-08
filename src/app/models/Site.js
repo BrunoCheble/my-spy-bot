@@ -15,6 +15,9 @@ class Site {
             case 'imovirtual':
                 adverts = await this.imovirtual(filter.filter);
                 break;
+            case 'ml':
+                adverts = await this.mercadolivre(filter.url);
+                break;
             default:
                 break;
         }
@@ -79,7 +82,7 @@ class Site {
             return await this.olx({ ...filter, page }, responseToEmail);
         }
 
-        if(responseToEmail.length == 0) {
+        if (responseToEmail.length == 0) {
             console.log('-------- Início -------');
             console.log(response.data);
             console.log('-------- Fim -------');
@@ -106,6 +109,65 @@ class Site {
 
         const responseToEmail = [];
         // Falta desenvolver :)
+        return responseToEmail;
+    }
+
+    static async mercadolivre(page, responseToEmail) {
+
+        const request = async _page => {
+            try {
+                return await axios.get(_page);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const response = await request(page);
+        const dom = new JSDOM(response.data);
+
+        console.log('Aguardar...');
+
+        await new Promise(resolve => {
+            setTimeout(resolve, 2000)
+        });
+
+        console.log('Fez a request ML');
+
+        if (
+            dom.window.document.querySelectorAll('.results-item')
+                .length === 1
+        ) {
+            console.log(response.data);
+            return [];
+        }
+
+        console.log('Existe anúncio');
+
+        await dom.window.document
+            .querySelectorAll('.results-item')
+            .forEach(item => {
+                responseToEmail.push({
+                    html: item.outerHTML,
+                    title: item.querySelector('.main-title') !== null ? item.querySelector('.main-title').textContent.trim() : '',
+                    price: item.querySelector('.item__price') !== null ? item.querySelector('.item__price').textContent.trim() : '',
+                    thumb: item.querySelector('img:first-child') !== null ? item.querySelector('img:first-child').getAttribute('src') : '',
+                    link: item.querySelector('.item__info-link').getAttribute('href'),
+                });
+            });
+
+        const nextPage = dom.window.document.querySelector('.andes-pagination__link.prefetch');
+        const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
+
+        if (linkNextPage !== null) {
+            return await this.mercadolivre(linkNextPage, responseToEmail);
+        }
+
+        if (responseToEmail.length == 0) {
+            console.log('-------- Início -------');
+            console.log(response.data);
+            console.log('-------- Fim -------');
+        }
+
         return responseToEmail;
     }
 }
