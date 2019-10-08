@@ -16,7 +16,7 @@ class Site {
                 adverts = await this.imovirtual(filter.filter);
                 break;
             case 'ml':
-                adverts = await this.mercadolivre(filter.url);
+                adverts = await this.mercadolivre(filter.url, []);
                 break;
             default:
                 break;
