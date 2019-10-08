@@ -146,12 +146,16 @@ class Site {
         await dom.window.document
             .querySelectorAll('.results-item')
             .forEach(item => {
+
+                let link = item.querySelector('.item__info-link').getAttribute('href');
+                let page = link.slice(0,parseInt(link.indexOf("&tracking_id")));
+                
                 responseToEmail.push({
                     html: item.outerHTML,
                     title: item.querySelector('.main-title') !== null ? item.querySelector('.main-title').textContent.trim() : '',
                     price: item.querySelector('.item__price') !== null ? item.querySelector('.item__price').textContent.trim() : '',
                     thumb: item.querySelector('img:first-child') !== null ? item.querySelector('img:first-child').getAttribute('src') : '',
-                    link: item.querySelector('.item__info-link').getAttribute('href'),
+                    link: page,
                 });
             });
 
