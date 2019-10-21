@@ -6,6 +6,18 @@ const Bot = require('../models/Bot');
 
 class ServiceController {
 
+    async findAll(req, res) {
+
+        const service = await Service.findAll();
+
+        if (service == null) {
+            res.status(500);
+            return res.json({ error: 'Service not found' });
+        }
+
+        return res.json(service._doc);
+    }
+
     async find(req, res) {
 
         const service = await Service.findOne({ password: req.params.id.toLocaleUpperCase() });

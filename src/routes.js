@@ -10,6 +10,7 @@ routes.get('', ServiceController.test);
 routes.post('/start', ServiceController.start);
 
 routes.post('/services', ServiceController.store);
+routes.get('/services', ServiceController.findAll);
 routes.get('/services/:id', ServiceController.find);
 routes.get('/services/:password/:interval', ServiceController.save);
 
