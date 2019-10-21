@@ -1,8 +1,10 @@
 const qs = require('qs');
-const axios = require('axios');
+//const axios = require('axios');
 const { JSDOM } = require('jsdom');
+const { setup } = require('axios-cache-adapter');
 
 class Site {
+
     static async request(filter) {
         let adverts = [];
 
@@ -31,10 +33,16 @@ class Site {
         const request = async _filter => {
             console.log(_filter);
             try {
-                return await axios.post(
-                    'https://www.olx.pt/ajax/search/list/',
-                    qs.stringify(_filter)
-                );
+
+                const api = setup({
+                    baseURL: 'https://www.olx.pt',
+                    cache: {
+                        maxAge: 15 * 60 * 1000
+                    }
+                });
+
+                return await api.post('/ajax/search/list/', qs.stringify(_filter));
+
             } catch (error) {
                 console.error(error);
             }
@@ -119,7 +127,16 @@ class Site {
 
         const request = async _page => {
             try {
-                return await axios.get(_page);
+
+                const api = setup({
+                    baseURL: '',
+                    cache: {
+                        maxAge: 15 * 60 * 1000
+                    }
+                });
+
+                return await api.get(_page);
+
             } catch (error) {
                 console.error(error);
             }
@@ -151,7 +168,7 @@ class Site {
             .forEach(item => {
 
                 let link = item.querySelector('.item__info-link').getAttribute('href');
-                let page = link.slice(0,parseInt(link.indexOf("&tracking_id")));
+                let page = link.slice(0, parseInt(link.indexOf("&tracking_id")));
 
                 responseToEmail.push({
                     html: item.outerHTML,
@@ -182,7 +199,14 @@ class Site {
 
         const request = async _page => {
             try {
-                return await axios.get(_page);
+                const api = setup({
+                    baseURL: '',
+                    cache: {
+                        maxAge: 15 * 60 * 1000
+                    }
+                });
+
+                return await api.get(_page);
             } catch (error) {
                 console.error(error);
             }
