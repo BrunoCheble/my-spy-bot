@@ -15,7 +15,7 @@ class ServiceController {
             return res.json({ error: 'Service not found' });
         }
 
-        return res.json(service._doc);
+        return res.json(service);
     }
 
     async find(req, res) {
