@@ -19,10 +19,19 @@ class ServiceController {
 
         filters = await Promise.all(filters.map(async filter => ({
             ...filter._doc,
-            adverts: await Advert.find({ _filterId: filter.id }).sort([['active', -1],['createdAt', -1]])
+            adverts: await Advert.find({ _filterId: filter.id }).sort([['active', -1], ['createdAt', -1]])
         })));
 
         return res.json({ ...service._doc, filters });
+    }
+
+    async save(req, res) {
+
+        const { password, interval } = req.params;
+
+        const service = await Service.findOneAndUpdate({ password }, { interval });
+
+        return res.json(service);
     }
 
     async store(req, res) {
@@ -44,7 +53,7 @@ class ServiceController {
         return res.json(service);
     }
 
-    async test(req, res) {       
+    async test(req, res) {
         return res.json({ working: true });
     }
 

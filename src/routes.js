@@ -11,6 +11,7 @@ routes.post('/start', ServiceController.start);
 
 routes.post('/services', ServiceController.store);
 routes.get('/services/:id', ServiceController.find);
+routes.get('/services/:password/:interval', ServiceController.save);
 
 routes.post('/filters', FilterController.store);
 routes.get('/filters', FilterController.find);
