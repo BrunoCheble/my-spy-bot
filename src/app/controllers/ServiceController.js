@@ -8,7 +8,7 @@ class ServiceController {
 
     async findAll(req, res) {
 
-        const service = await Service.findAll();
+        const service = await Service.find();
 
         if (service == null) {
             res.status(500);
