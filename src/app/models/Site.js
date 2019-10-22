@@ -128,6 +128,13 @@ class Site {
         const request = async _page => {
             try {
 
+                if(_page.indexOf('?') > 0) {
+                    _page += '&'+parseInt(Math.random()*10000);
+                }
+                else {
+                    _page += '?'+parseInt(Math.random()*10000);
+                }
+                
                 const api = setup({
                     baseURL: '',
                     cache: {
