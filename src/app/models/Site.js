@@ -101,7 +101,7 @@ class Site {
         const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
         
         if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
-            console.log('No results OLX.');
+            console.log('No results OLX. »»»» ' + process.env.FROMEMAIL);
             const result = await dom.window.document.querySelector('body').outerHTML;
             await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO OLX ------------', result);
             return [];
