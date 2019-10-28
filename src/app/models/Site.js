@@ -64,7 +64,7 @@ class Site {
         console.log('---- Mode Repeat! -----');
 
         const pages = [
-            'http://localhost:3333/repeat/' + id_service + '/' + id_filter,
+            //'http://localhost:3333/repeat/' + id_service + '/' + id_filter,
             'https://my-spy-bot1.herokuapp.com/repeat/' + id_service + '/' + id_filter,
             'https://my-spy-bot2.herokuapp.com/repeat/' + id_service + '/' + id_filter,
         ];
@@ -100,8 +100,8 @@ class Site {
         
         if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
             console.log('No results OLX.');
-            const result = await dom.window.document.querySelector('body').outerHTML;
-            console.log(result);
+            //const result = await dom.window.document.querySelector('body').outerHTML;
+            //console.log(result);
             return [];
         }
 
