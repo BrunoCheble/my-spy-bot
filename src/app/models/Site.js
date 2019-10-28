@@ -7,8 +7,6 @@ class Site {
 
     static async getResponse(_page, type = 'get', _filter = {}) {
 
-        console.log(_filter);
-
         await new Promise(resolve => {
             setTimeout(resolve, 2000)
         });
@@ -44,8 +42,6 @@ class Site {
 
     static async request(filter) {
         let adverts = [];
-
-        console.log(filter.origin);
 
         switch (filter.origin) {
             case 'olx':
@@ -85,6 +81,7 @@ class Site {
 
         pages.map(async page => {
             if(response == 0) {
+                console.log('Repeat Request: '+page);
                 request = await api.get(page);
                 if(request.status == 200 && request.data.data > 0) {
                     response = request.data.data;
@@ -92,6 +89,7 @@ class Site {
             }
         });
     
+        console.log('Repeat Response: '+response);
         return response;
     }
 
@@ -100,10 +98,11 @@ class Site {
         const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
 
         if (dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
+            console.log('No results OLX.');
             return [];
         }
 
-        console.log('Existe anúncio');
+        console.log('Existe no anúncio - OLX');
 
         await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
@@ -136,14 +135,12 @@ class Site {
 
         const dom = await this.getResponse(page,'get');
 
-        console.log('Fez a request ML');
-
         if (dom.window.document.querySelectorAll('.results-item').length === 1) {
-            console.log('No results.');
+            console.log('No results ML.');
             return [];
         }
 
-        console.log('Existe anúncio');
+        console.log('Existe no anúncio - ML');
 
         await dom.window.document
             .querySelectorAll('.results-item')

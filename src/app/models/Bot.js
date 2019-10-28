@@ -50,8 +50,6 @@ class Bot {
         console.log(`Intervalo ${service.interval} segundos.`);
         console.log(`Emails: ${service.emails}`);
         console.log(new Date().toLocaleString());
-
-        console.log(filters.length);
         
         // Para cada serviço, busca seus respetivos filtros;
         filters.map(async filter => this.runFilter(service, filter));

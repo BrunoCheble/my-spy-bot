@@ -12,9 +12,9 @@ class Email {
         };
 
         const advert = await Advert.findOneAndUpdate(data, { active: true });
-        
+
         if (advert == null) {
-            await Advert.create({...data, title, thumb});
+            await Advert.create({ ...data, title, thumb });
             return true;
         }
 
@@ -22,16 +22,16 @@ class Email {
     }
 
     static async send(_filterId, _serviceId, emails, subject, adverts) {
-        
-        console.log('--> Anúncios Encontrados: '+adverts.length);
+
+        console.log('--> Anúncios Encontrados (' + subject + '): ' + adverts.length);
         adverts = await this.removeDuplicates(adverts);
-        
-        console.log('--> Anúncios (não repetidos): '+adverts.length);
+
+        console.log('--> Anúncios não repetidos (' + subject + '): ' + adverts.length);
 
         const news_adverts = await this.cleanEmails(adverts, _serviceId, _filterId);
 
-        console.log('--> Novos anúncios: '+news_adverts.length);
-        
+        console.log('--> Novos anúncios (' + subject + '): ' + news_adverts.length);
+
         if (news_adverts.length > 0) {
             this.sendMail(
                 emails,
@@ -53,7 +53,7 @@ class Email {
     }
 
     static async cleanEmails(adverts, _serviceId, _filterId) {
-        
+
         const result = await filterAsync(
             adverts,
             async advert =>
