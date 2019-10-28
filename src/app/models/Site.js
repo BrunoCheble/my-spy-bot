@@ -144,8 +144,9 @@ class Site {
         const itens = await dom.window.document.querySelectorAll('.results-item');
 
         if (itens == undefined || itens.length === 0) {
-            console.log('No results ML.');
+            console.log('No results ML. »»»» ' + process.env.FROMEMAIL);
             const result = await dom.window.document.querySelector('body').outerHTML;
+            
             await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO ML ------------', result);
             return [];
         }
