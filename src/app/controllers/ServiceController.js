@@ -70,15 +70,16 @@ class ServiceController {
     }
 
     async repeat(req, res) {
-        
+
         const { id_service, id_filter } = req.params;
-        console.log('Called Repeat - ' + id_service + ' / ' + id_filter);
+        console.log('---------------------------------------- Called Repeat - ' + id_service + ' / ' + id_filter +' ----------------------------------------');
+        
+        const service = await Service.findById(id_service);
+        const filter = await Filter.findById(id_filter);
 
-        const service = await Service.find({ id: id_service });
-        const filter = await Filter.find({ id: id_filter });
-
-        const task = await Bot.runFilter(service, filter, false);
-        return res.json({ message: task });
+        const data = await Bot.runFilter(service, filter, false);
+        
+        return res.json({ data });
     }
 
     async start(req, res) {

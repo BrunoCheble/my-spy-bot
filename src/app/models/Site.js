@@ -68,18 +68,30 @@ class Site {
         console.log('Mode Repeat!');
 
         const pages = [
-            //'https://my-spy-bot1.herokuapp.com/repeat/'+id_service+'/'+id_filter,
+            'http://localhost:3333/repeat/'+id_service+'/'+id_filter,
+            'https://my-spy-bot1.herokuapp.com/repeat/'+id_service+'/'+id_filter,
             'https://my-spy-bot2.herokuapp.com/repeat/'+id_service+'/'+id_filter,
         ];
 
-        let response = '';
+        const api = setup({
+            baseURL: '',
+            cache: {
+                maxAge: 15 * 60 * 1000
+            }
+        });
+
+        let request = null;
+        let response = 0;
 
         pages.map(async page => {
-            console.log(page);
-            response = await this.getResponse(page, 'get');
-            console.log(response);
+            if(response == 0) {
+                request = await api.get(page);
+                if(request.status == 200 && request.data.data > 0) {
+                    response = request.data.data;
+                }
+            }
         });
-        
+    
         return response;
     }
 

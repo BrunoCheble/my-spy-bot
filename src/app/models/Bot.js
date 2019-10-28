@@ -29,7 +29,7 @@ class Bot {
         }
 
         if(!repeat) {
-            return response.adverts;
+            return response.adverts.length;
         }
     }
 
