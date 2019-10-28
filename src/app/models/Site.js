@@ -99,16 +99,15 @@ class Site {
     static async olx(filter, responseToEmail) {
 
         const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
-        
-        if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
+        const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
+
+        if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1 || itens.length === 0) {
             console.log('No results OLX. »»»» ' + process.env.FROMEMAIL);
             const result = await dom.window.document.querySelector('body').outerHTML;
             await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO OLX ------------', result);
             return [];
         }
 
-        const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
-        
         console.log('Existe(m) ' + itens.length + ' anúncio(s) - OLX');
 
         itens.forEach(item => {
