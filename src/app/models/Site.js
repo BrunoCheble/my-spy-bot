@@ -13,7 +13,7 @@ class Site {
             setTimeout(resolve, 2000)
         });
 
-        const response = null;
+        let response = null;
 
         try {
             
