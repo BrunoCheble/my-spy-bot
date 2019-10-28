@@ -5,6 +5,43 @@ const { setup } = require('axios-cache-adapter');
 
 class Site {
 
+    static async getResponse(_page, type = 'get', _filter = {}) {
+
+        console.log(_filter);
+
+        await new Promise(resolve => {
+            setTimeout(resolve, 2000)
+        });
+
+        const response = null;
+
+        try {
+            
+            const api = setup({
+                baseURL: '',
+                cache: {
+                    maxAge: 15 * 60 * 1000
+                }
+            });
+            
+            if (type == 'post') {
+                response = await api.post(_page, qs.stringify(_filter));
+            }
+            else {
+
+                _page += _page.indexOf('?') > 0 ? '&' : '?';
+                _page += parseInt(Math.random() * 10000);
+
+                response = await api.get(_page);
+            }
+
+            return new JSDOM(response.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     static async request(filter) {
         let adverts = [];
 
@@ -13,9 +50,6 @@ class Site {
         switch (filter.origin) {
             case 'olx':
                 adverts = await this.olx(filter.filter, []);
-                break;
-            case 'imovirtual':
-                adverts = await this.imovirtual(filter.filter);
                 break;
             case 'ml':
                 adverts = await this.mercadolivre(filter.url, []);
@@ -29,45 +63,35 @@ class Site {
         return { title: filter.title, adverts };
     }
 
-    static async olx(filter, responseToEmail) {
-        const request = async _filter => {
-            console.log(_filter);
-            try {
+    static async repeat(id_service, id_filter) {
+        
+        console.log('Mode Repeat!');
 
-                const api = setup({
-                    baseURL: 'https://www.olx.pt',
-                    cache: {
-                        maxAge: 15 * 60 * 1000
-                    }
-                });
+        const pages = [
+            //'https://my-spy-bot1.herokuapp.com/repeat/'+id_service+'/'+id_filter,
+            'https://my-spy-bot2.herokuapp.com/repeat/'+id_service+'/'+id_filter,
+        ];
 
-                return await api.post('/ajax/search/list/', qs.stringify(_filter));
+        let response = '';
 
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        const response = await request(filter);
-        const dom = new JSDOM(response.data);
-
-        console.log('Aguardar...');
-
-        await new Promise(resolve => {
-            setTimeout(resolve, 2000)
+        pages.map(async page => {
+            console.log(page);
+            response = await this.getResponse(page, type = 'get');
+            console.log(response);
         });
+        
+        return response;
+    }
 
-        console.log('Fez a request');
+    static async olx(filter, responseToEmail) {
 
-        if (
-            dom.window.document.querySelectorAll('.emptyinfo-location')
-                .length === 1
-        ) {
+        const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
+
+        if (dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
             return [];
         }
 
         console.log('Existe anúncio');
-
 
         await dom.window.document
             .querySelectorAll('#offers_table .wrap .offer-wrapper')
@@ -93,78 +117,17 @@ class Site {
             return await this.olx({ ...filter, page }, responseToEmail);
         }
 
-        if (responseToEmail.length == 0) {
-            console.log('-------- Início -------');
-            console.log(response.data);
-            console.log('-------- Fim -------');
-        }
-
-        return responseToEmail;
-    }
-
-    static async imovirtual(filter) {
-        /*
-        const request = async filter => {
-            try {
-                return await axios.post(
-                    'https://www.imovirtual.com/ajax/search/list/',
-                    qs.stringify(filter)
-                );
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        */
-        // const response = await request(filter);
-        // const dom = new JSDOM(response.plainText);
-
-        const responseToEmail = [];
-        // Falta desenvolver :)
         return responseToEmail;
     }
 
     static async mercadolivre(page, responseToEmail) {
 
-        const request = async _page => {
-            try {
-
-                if(_page.indexOf('?') > 0) {
-                    _page += '&'+parseInt(Math.random()*10000);
-                }
-                else {
-                    _page += '?'+parseInt(Math.random()*10000);
-                }
-                
-                const api = setup({
-                    baseURL: '',
-                    cache: {
-                        maxAge: 15 * 60 * 1000
-                    }
-                });
-
-                return await api.get(_page);
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        const response = await request(page);
-        const dom = new JSDOM(response.data);
-
-        console.log('Aguardar...');
-
-        await new Promise(resolve => {
-            setTimeout(resolve, 2000)
-        });
+        const dom = await this.getResponse(page,'get');
 
         console.log('Fez a request ML');
 
-        if (
-            dom.window.document.querySelectorAll('.results-item')
-                .length === 1
-        ) {
-            console.log(response.data);
+        if (dom.window.document.querySelectorAll('.results-item').length === 1) {
+            console.log('No results.');
             return [];
         }
 
@@ -193,48 +156,17 @@ class Site {
             return await this.mercadolivre(linkNextPage, responseToEmail);
         }
 
-        if (responseToEmail.length == 0) {
-            console.log('-------- Início -------');
-            console.log(response.data);
-            console.log('-------- Fim -------');
-        }
-
         return responseToEmail;
     }
 
     static async olxbr(page, responseToEmail) {
 
-        const request = async _page => {
-            try {
-                const api = setup({
-                    baseURL: '',
-                    cache: {
-                        maxAge: 15 * 60 * 1000
-                    }
-                });
-
-                return await api.get(_page);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        const response = await request(page);
-        const dom = new JSDOM(response.data);
-
-        console.log('Aguardar...');
-
-        await new Promise(resolve => {
-            setTimeout(resolve, 2000)
-        });
+        const dom = await this.getResponse(page);
 
         console.log('Fez a request OLX BR');
 
-        if (
-            dom.window.document.querySelectorAll('#main-ad-list .item:not(.list_native)')
-                .length === 1
-        ) {
-            console.log(response.data);
+        if (dom.window.document.querySelectorAll('#main-ad-list .item:not(.list_native)').length === 1) {
+            console.log('No results.');
             return [];
         }
 
@@ -256,7 +188,7 @@ class Site {
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
         if (linkNextPage !== null) {
-            return await this.mercadolivre(linkNextPage, responseToEmail);
+            return await this.olxbr(linkNextPage, responseToEmail);
         }
 
         if (responseToEmail.length == 0) {
