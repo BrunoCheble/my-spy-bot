@@ -97,17 +97,18 @@ class Site {
     static async olx(filter, responseToEmail) {
 
         const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
-        const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
-
-        if (itens == undefined || itens.length == 0) {
+        
+        if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
             console.log('No results OLX.');
             console.log(dom.window.document.outerHTML);
             return [];
         }
 
+        const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
+        
         console.log('Existe(m) ' + itens.length + ' anúncio(s) - OLX');
 
-        await itens.forEach(item => {
+        itens.forEach(item => {
             responseToEmail.push({
                 html: item.outerHTML,
                 title: item.querySelector('.title-cell h3 strong') !== null ? item.querySelector('.title-cell h3 strong').textContent : '',
@@ -122,6 +123,8 @@ class Site {
         const nextPage = dom.window.document.querySelector('[data-cy="page-link-next"]');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
+        console.log(responseToEmail);
+        
         if (linkNextPage !== null) {
             const search = "&page=";
             const page = linkNextPage.slice(parseInt(linkNextPage.indexOf(search)) + parseInt(search.length));
@@ -162,6 +165,8 @@ class Site {
         const nextPage = dom.window.document.querySelector('.andes-pagination__link.prefetch');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
+        console.log(responseToEmail);
+        
         if (linkNextPage !== null) {
             return await this.mercadolivre(linkNextPage, responseToEmail);
         }
