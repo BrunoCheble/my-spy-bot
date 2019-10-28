@@ -14,14 +14,14 @@ class Site {
         let response = null;
 
         try {
-            
+
             const api = setup({
                 baseURL: '',
                 cache: {
                     maxAge: 15 * 60 * 1000
                 }
             });
-            
+
             if (type == 'post') {
                 response = await api.post(_page, qs.stringify(_filter));
             }
@@ -60,13 +60,13 @@ class Site {
     }
 
     static async repeat(id_service, id_filter) {
-        
-        console.log('Mode Repeat!');
+
+        console.log('---- Mode Repeat! -----');
 
         const pages = [
-            'http://localhost:3333/repeat/'+id_service+'/'+id_filter,
-            'https://my-spy-bot1.herokuapp.com/repeat/'+id_service+'/'+id_filter,
-            'https://my-spy-bot2.herokuapp.com/repeat/'+id_service+'/'+id_filter,
+            'http://localhost:3333/repeat/' + id_service + '/' + id_filter,
+            'https://my-spy-bot1.herokuapp.com/repeat/' + id_service + '/' + id_filter,
+            'https://my-spy-bot2.herokuapp.com/repeat/' + id_service + '/' + id_filter,
         ];
 
         const api = setup({
@@ -80,43 +80,44 @@ class Site {
         let response = 0;
 
         pages.map(async page => {
-            if(response == 0) {
-                console.log('Repeat Request: '+page);
+            if (response == 0) {
+                console.log('Repeat Request: ' + page);
                 request = await api.get(page);
-                if(request.status == 200 && request.data.data > 0) {
+                if (request.status == 200 && request.data.data > 0) {
+                    console.log('Response from page ' + page + ': ' + request.data.data);
                     response = request.data.data;
                 }
             }
         });
-    
-        console.log('Repeat Response: '+response);
+
+        console.log('Repeat Response: ' + response);
         return response;
     }
 
     static async olx(filter, responseToEmail) {
 
         const dom = await this.getResponse('https://www.olx.pt/ajax/search/list/', 'post', filter);
+        const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
 
-        if (dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
+        if (itens == undefined || itens.length == 0) {
             console.log('No results OLX.');
+            console.log(dom.window.document.outerHTML);
             return [];
         }
 
-        console.log('Existe no anúncio - OLX');
+        console.log('Existe(m) ' + itens.length + ' anúncio(s) - OLX');
 
-        await dom.window.document
-            .querySelectorAll('#offers_table .wrap .offer-wrapper')
-            .forEach(item => {
-                responseToEmail.push({
-                    html: item.outerHTML,
-                    title: item.querySelector('.title-cell h3 strong') !== null ? item.querySelector('.title-cell h3 strong').textContent : '',
-                    price: item.querySelector('.price strong') !== null ? item.querySelector('.price strong').textContent : '',
-                    thumb: item.querySelector('img') !== null ? item.querySelector('img').getAttribute('src') : '',
-                    link: item
-                        .querySelector('.detailsLink')
-                        .getAttribute('href'),
-                });
+        await itens.forEach(item => {
+            responseToEmail.push({
+                html: item.outerHTML,
+                title: item.querySelector('.title-cell h3 strong') !== null ? item.querySelector('.title-cell h3 strong').textContent : '',
+                price: item.querySelector('.price strong') !== null ? item.querySelector('.price strong').textContent : '',
+                thumb: item.querySelector('img') !== null ? item.querySelector('img').getAttribute('src') : '',
+                link: item
+                    .querySelector('.detailsLink')
+                    .getAttribute('href'),
             });
+        });
 
         const nextPage = dom.window.document.querySelector('[data-cy="page-link-next"]');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
@@ -133,30 +134,30 @@ class Site {
 
     static async mercadolivre(page, responseToEmail) {
 
-        const dom = await this.getResponse(page,'get');
+        const dom = await this.getResponse(page, 'get');
+        const itens = await dom.window.document.querySelectorAll('.results-item');
 
-        if (dom.window.document.querySelectorAll('.results-item').length === 1) {
+        if (itens == undefined || itens.length === 0) {
             console.log('No results ML.');
+            console.log(dom.window.document.outerHTML);
             return [];
         }
 
         console.log('Existe no anúncio - ML');
 
-        await dom.window.document
-            .querySelectorAll('.results-item')
-            .forEach(item => {
+        await itens.forEach(item => {
 
-                let link = item.querySelector('.item__info-link').getAttribute('href');
-                let page = link.slice(0, parseInt(link.indexOf("&tracking_id")));
+            let link = item.querySelector('.item__info-link').getAttribute('href');
+            let page = link.slice(0, parseInt(link.indexOf("&tracking_id")));
 
-                responseToEmail.push({
-                    html: item.outerHTML,
-                    title: item.querySelector('.main-title') !== null ? item.querySelector('.main-title').textContent.trim() : '',
-                    price: item.querySelector('.item__price') !== null ? item.querySelector('.item__price').textContent.trim() : '',
-                    thumb: item.querySelector('img:first-child') !== null ? item.querySelector('img:first-child').getAttribute('src') : '',
-                    link: page,
-                });
+            responseToEmail.push({
+                html: item.outerHTML,
+                title: item.querySelector('.main-title') !== null ? item.querySelector('.main-title').textContent.trim() : '',
+                price: item.querySelector('.item__price') !== null ? item.querySelector('.item__price').textContent.trim() : '',
+                thumb: item.querySelector('img:first-child') !== null ? item.querySelector('img:first-child').getAttribute('src') : '',
+                link: page,
             });
+        });
 
         const nextPage = dom.window.document.querySelector('.andes-pagination__link.prefetch');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
