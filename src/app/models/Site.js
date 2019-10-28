@@ -76,7 +76,7 @@ class Site {
 
         pages.map(async page => {
             console.log(page);
-            response = await this.getResponse(page, type = 'get');
+            response = await this.getResponse(page, 'get');
             console.log(response);
         });
         
