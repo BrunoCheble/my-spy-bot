@@ -67,6 +67,7 @@ class Site {
             //'http://localhost:3333/repeat/' + id_service + '/' + id_filter,
             'https://my-spy-bot1.herokuapp.com/repeat/' + id_service + '/' + id_filter,
             'https://my-spy-bot2.herokuapp.com/repeat/' + id_service + '/' + id_filter,
+            'https://my-spy-bot3.herokuapp.com/repeat/' + id_service + '/' + id_filter,
         ];
 
         const api = setup({
