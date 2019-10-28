@@ -2,6 +2,7 @@ const qs = require('qs');
 //const axios = require('axios');
 const { JSDOM } = require('jsdom');
 const { setup } = require('axios-cache-adapter');
+const Email = require('./Email');
 
 class Site {
 
@@ -101,8 +102,8 @@ class Site {
         
         if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
             console.log('No results OLX.');
-            //const result = await dom.window.document.querySelector('body').outerHTML;
-            //console.log(result);
+            const result = await dom.window.document.querySelector('body').outerHTML;
+            await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO OLX ------------', result);
             return [];
         }
 
@@ -145,7 +146,7 @@ class Site {
         if (itens == undefined || itens.length === 0) {
             console.log('No results ML.');
             const result = await dom.window.document.querySelector('body').outerHTML;
-            console.log(result);
+            await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO ML ------------', result);
             return [];
         }
 
