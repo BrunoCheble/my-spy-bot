@@ -100,7 +100,8 @@ class Site {
         
         if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1) {
             console.log('No results OLX.');
-            console.log(dom.window.document.outerHTML);
+            const result = await dom.window.document.querySelector('body').outerHTML;
+            console.log(result);
             return [];
         }
 
@@ -123,7 +124,7 @@ class Site {
         const nextPage = dom.window.document.querySelector('[data-cy="page-link-next"]');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
-        console.log(responseToEmail);
+        //console.log(responseToEmail);
         
         if (linkNextPage !== null) {
             const search = "&page=";
@@ -142,7 +143,8 @@ class Site {
 
         if (itens == undefined || itens.length === 0) {
             console.log('No results ML.');
-            console.log(dom.window.document.outerHTML);
+            const result = await dom.window.document.querySelector('body').outerHTML;
+            console.log(result);
             return [];
         }
 
@@ -165,7 +167,7 @@ class Site {
         const nextPage = dom.window.document.querySelector('.andes-pagination__link.prefetch');
         const linkNextPage = nextPage !== null ? nextPage.getAttribute('href') : null;
 
-        console.log(responseToEmail);
+        //console.log(responseToEmail);
         
         if (linkNextPage !== null) {
             return await this.mercadolivre(linkNextPage, responseToEmail);
