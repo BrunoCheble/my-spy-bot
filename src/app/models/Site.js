@@ -102,9 +102,9 @@ class Site {
         const itens = await dom.window.document.querySelectorAll('#offers_table .wrap .offer-wrapper');
 
         if (await dom.window.document.querySelectorAll('.emptyinfo-location').length === 1 || itens.length === 0) {
-            console.log('No results OLX. »»»» ' + process.env.FROMEMAIL);
+            console.log('No results OLX. »»»» ' + process.env.LOGEMAIL);
             const result = await dom.window.document.querySelector('body').outerHTML;
-            await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO OLX ------------', result);
+            await Email.sendMail(process.env.LOGEMAIL, '------------ LOG ERRO OLX ------------', result);
             return [];
         }
 
@@ -143,10 +143,10 @@ class Site {
         const itens = await dom.window.document.querySelectorAll('.results-item');
 
         if (itens == undefined || itens.length === 0) {
-            console.log('No results ML. »»»» ' + process.env.FROMEMAIL);
+            console.log('No results ML. »»»» ' + process.env.LOGEMAIL);
             const result = await dom.window.document.querySelector('body').outerHTML;
             
-            await Email.sendMail(process.env.FROMEMAIL, '------------ LOG ERRO ML ------------', result);
+            await Email.sendMail(process.env.LOGEMAIL, '------------ LOG ERRO ML ------------', result);
             return [];
         }
 
