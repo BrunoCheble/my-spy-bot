@@ -1,9 +1,6 @@
-//const qs = require('qs');
-//const axios = require('axios');
-//const { JSDOM } = require('jsdom');
 const { setup } = require('axios-cache-adapter');
-//const Email = require('./Email');
 
+const Common = require('./sites/Common');
 const Olx = require('./sites/Olx');
 const MercadoLivre = require('./sites/MercadoLivre');
 
@@ -11,26 +8,24 @@ class Site {
 
     static async request(filter) {
         let adverts = [];
-        let site = null;
-        
+
         switch (filter.origin) {
             case 'olx':
-                //site = new Olx();
-                adverts = await Olx.getAdverts(filter.filter, []);
+                adverts = await Olx.getAdverts(filter, []);
                 break;
             case 'ml':
-                //site = new MercadoLivre();
-                adverts = await MercadoLivre.getAdverts(filter.url, []);
+                adverts = await MercadoLivre.getAdverts(filter, []);
                 break;
             default:
                 break;
         }
+
+        Common.saveLog('Site/request', { title: filter.title, adverts }, filter.id, filter._serviceId);
+
         return { title: filter.title, adverts };
     }
 
     static async repeat(id_service, id_filter) {
-
-        console.log('---- Mode Repeat! -----');
 
         const api = setup({ baseURL: '', cache: { maxAge: 15 * 60 * 1000 } });
 
@@ -43,14 +38,13 @@ class Site {
 
             request = await api.get(page);
 
-            console.log('Response from page ' + page + ': ' + request.data.data);
-
             if (request.status == 200 && request.data.data > 0) {
                 response = request.data.data;
             }
+
+            Common.saveLog('Site/repeat', { bot, page, status: request.status, data: request.data.data }, id_filter, id_service);
         }
 
-        console.log('Last Response: ' + response);
         return response;
     }
 }

@@ -13,20 +13,26 @@ class Olx {
     static get nextPage() { return '[data-cy="page-link-next"]'; }
     static get noResult() { return '.emptyinfo-location'; }
 
-    static async getAdverts(filter, responseToEmail) {
+    static async getAdverts(_filter, responseToEmail) {
+
+        let { filter, id, _serviceId } = _filter;
 
         const document = await Common.getResponse(this.url, 'post', filter);
-        const itens = await document.querySelectorAll(this.results);
+
+        if(document == null) {
+            return [];
+        }
 
         try {
-            // No results
-            if (await document.querySelectorAll(this.noResult).length === 1 || itens.length === 0) {
+            if (await document.querySelectorAll(this.noResult).length === 1) {
                 throw new Error(await document.querySelector('body').outerHTML);
             }
 
+            const itens = document.querySelectorAll(this.results);
+
             itens.forEach(item => responseToEmail.push(
                 Common.getResponseToEmail(
-                    item.outerHTML,
+                    item,
                     item.querySelector(this.title),
                     item.querySelector(this.price),
                     item.querySelector(this.img),
@@ -34,26 +40,32 @@ class Olx {
                 )
             ));
 
+            Common.saveLog('Olx/getAdverts', { responseToEmail }, id, _serviceId);
+
             // Get next page
-            let page = this.getLinkNextPage(document);
+            let page = this.getLinkNextPage(document, id);
             if (page !== null) {
-                return await this.getAdverts({ ...filter, page }, responseToEmail);
+                filter.page = page;
+                return await this.getAdverts({ ..._filter, filter }, responseToEmail);
             }
 
             return responseToEmail;
 
         } catch (error) {
+            Common.saveLog('Olx/getAdverts/noResult', { body: error.message }, id, _serviceId);
             Email.sendFail('No results OLX', error.message);
             return [];
         }
     }
 
-    static async getLinkNextPage(document) {
+    static getLinkNextPage(document, id) {
 
         const next_page = document.querySelector(this.nextPage);
         const linkNextPage = next_page !== null ? next_page.getAttribute('href') : null;
 
         let page = null;
+
+        Common.saveLog('Olx/getLinkNextPage', { linkNextPage }, id, null);
 
         if (linkNextPage !== null) {
             const search = "&page=";

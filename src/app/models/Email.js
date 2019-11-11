@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const { filterAsync } = require('node-filter-async');
 const Advert = require('./Advert');
+const Common = require('./sites/Common');
 
 class Email {
     static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
@@ -19,15 +20,14 @@ class Email {
 
     static async send(_filterId, _serviceId, emails, subject, adverts) {
 
-        console.log('--> Anúncios Encontrados (' + subject + '): ' + adverts.length);
-        adverts = await this.removeDuplicates(adverts);
+        const advertsOrg = adverts;
 
-        console.log('--> Anúncios não repetidos (' + subject + '): ' + adverts.length);
+        adverts = await this.removeDuplicates(adverts);
 
         const news_adverts = await this.cleanEmails(adverts, _serviceId, _filterId);
 
-        console.log('--> Novos anúncios (' + subject + '): ' + news_adverts.length);
-
+        console.log('--> '+subject+' : Novos anúncios (' + news_adverts.length + ') |  Anúncios não repetidos (' + adverts.length + ') | Anúncios Encontrados (' + advertsOrg.length + ')');
+        
         if (news_adverts.length > 0) {
             this.sendMail(
                 emails,

@@ -3,7 +3,7 @@ const Common = require('./Common');
 const Email = require('../Email');
 
 class MercadoLivre {
-    
+
     static get results() { return '.results-item'; }
     static get title() { return '.main-title'; }
     static get price() { return '.item__price'; }
@@ -11,9 +11,11 @@ class MercadoLivre {
     static get link() { return '.item__info-link'; }
     static get nextPage() { return '.andes-pagination__link.prefetch'; }
 
-    static async getAdverts(page, responseToEmail) {
+    static async getAdverts(filter, responseToEmail) {
 
-        const document = await Common.getResponse(page, 'get');
+        let { url, id, _serviceId } = filter;
+        
+        const document = await Common.getResponse(url, 'get');
         const itens = await document.querySelectorAll(this.results);
 
         try {
@@ -24,12 +26,12 @@ class MercadoLivre {
 
             itens.forEach(item => {
 
-                let link = item.querySelector(this.page).getAttribute('href');
+                let link = item.querySelector(this.link).getAttribute('href');
                 let page = link.slice(0, parseInt(link.indexOf("&tracking_id")));
 
                 responseToEmail.push(
                     Common.getResponseToEmail(
-                        item.outerHTML,
+                        item,
                         item.querySelector(this.title),
                         item.querySelector(this.price),
                         item.querySelector(this.img),
@@ -37,11 +39,14 @@ class MercadoLivre {
                     )
                 )
             });
+            
+            //Common.saveLog('MercadoLivre/getAdverts', { responseToEmail }, id, _serviceId);
 
             // Get next page
-            let page = this.getLinkNextPage(document);
-            if (page !== null) {
-                return await this.getAdverts(page, responseToEmail);
+            let nextPage = this.getLinkNextPage(document);
+            
+            if (nextPage !== null) {
+                return await this.getAdverts({ ...filter, url: nextPage }, responseToEmail);
             }
 
             return responseToEmail;
@@ -52,9 +57,9 @@ class MercadoLivre {
         }
     }
 
-    static async getLinkNextPage(document) {
+    static getLinkNextPage(document) {
         const next_page = document.querySelector(this.nextPage);
-        return nextPage !== null ? next_page.getAttribute('href') : null;
+        return next_page !== null ? next_page.getAttribute('href') : null;
     }
 }
 

@@ -1,27 +1,28 @@
 const qs = require('qs');
 const { JSDOM } = require('jsdom');
 const { setup } = require('axios-cache-adapter');
+const Log = require('../Log');
 
 class Common {
-    
-    static async getResponse(_page, type = 'get', _filter = {}) {
+
+    static async getResponse(baseURL, type = 'get', _filter = {}) {
 
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        const api = setup({ baseURL: _page, cache: { maxAge: 15 * 60 * 1000 } });
+        const api = setup({ baseURL, cache: { maxAge: 15 * 60 * 1000 } });
 
         try {
-            const response = type == 'get' ? await api.get((_page.indexOf('?') > 0 ? '&' : '?') + parseInt(Math.random() * 10000)) : await api.post('', qs.stringify(_filter));
+            const response = type == 'get' ? await api.get((baseURL.indexOf('?') > 0 ? '&' : '?') + parseInt(Math.random() * 10000)) : await api.post('', qs.stringify(_filter));
             const dom = new JSDOM(response.data);
-            
+
             return dom.window.document;
 
         } catch (error) {
-            console.log(error);
+            return null;
         }
     }
 
-    static async getResponseToEmail(html, title, price, thumb, link) {
+    static getResponseToEmail(html, title, price, thumb, link) {
         return {
             html: html !== null ? html.outerHTML : '',
             title: title !== null ? title.textContent.trim() : '',
@@ -30,6 +31,16 @@ class Common {
             link
         };
     }
+
+    static async saveLog(method, body, _filterId, _serviceId) {
+        try {
+            await Log.create({ method, body, _filterId, _serviceId });
+        }
+        catch (erro) {
+            console.log(erro);
+        }
+    }
+
 }
 
 module.exports = Common;
