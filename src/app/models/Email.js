@@ -4,12 +4,8 @@ const Advert = require('./Advert');
 
 class Email {
     static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
-        const data = {
-            _filterId,
-            _serviceId,
-            link,
-            last_price,
-        };
+        
+        const data = { _filterId, _serviceId, link, last_price };
 
         const advert = await Advert.findOneAndUpdate(data, { active: true });
 
@@ -87,6 +83,10 @@ class Email {
                 }
             }
         );
+    }
+    
+    static async sendFail(title,message) {
+        await this.sendMail(process.env.LOGEMAIL, '------------ ' + title + ' ------------', message);
     }
 }
 
