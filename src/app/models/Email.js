@@ -5,7 +5,7 @@ const Common = require('./sites/Common');
 
 class Email {
     static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
-        
+
         const data = { _filterId, _serviceId, link, last_price };
 
         const advert = await Advert.findOneAndUpdate(data, { active: true });
@@ -26,8 +26,8 @@ class Email {
 
         const news_adverts = await this.cleanEmails(adverts, _serviceId, _filterId);
 
-        console.log('--> '+subject+' : Novos anúncios (' + news_adverts.length + ') |  Anúncios não repetidos (' + adverts.length + ') | Anúncios Encontrados (' + advertsOrg.length + ')');
-        
+        console.log('> ' + subject + ': N./' + news_adverts.length + '  NR./' + adverts.length + ' E./' + advertsOrg.length);
+
         if (news_adverts.length > 0) {
             this.sendMail(
                 emails,
@@ -84,9 +84,9 @@ class Email {
             }
         );
     }
-    
-    static async sendFail(title,message) {
-        await this.sendMail(process.env.LOGEMAIL, '------------ ' + title + ' ------------', message);
+
+    static async sendFail(title, message) {
+        await this.sendMail(process.env.LOGEMAIL, '------------ BOT ' + process.env.BOT + ': ' + title + ' ------------', message);
     }
 }
 
