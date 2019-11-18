@@ -34,7 +34,7 @@ class Common {
 
     static async saveLog(method, body, _filterId, _serviceId) {
         try {
-            await Log.create({ method, body, _filterId, _serviceId });
+            await Log.create({ bot: process.env.BOT, method, body, _filterId, _serviceId });
         }
         catch (erro) {
             console.log(erro);

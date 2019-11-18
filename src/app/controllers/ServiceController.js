@@ -3,6 +3,7 @@ const Filter = require('../models/Filter');
 const Email = require('../models/Email');
 const Advert = require('../models/Advert');
 const Bot = require('../models/Bot');
+const Log = require('../models/Log');
 
 class ServiceController {
 
@@ -88,6 +89,8 @@ class ServiceController {
         console.log('Called Start - ' + interval);
         //const services = await Service.find({ interval });
 
+        await Log.deleteMany();
+        
         const task = await Bot.run(interval);
         return res.json({ message: task });
     }

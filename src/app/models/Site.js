@@ -9,6 +9,8 @@ class Site {
     static async request(filter) {
         let adverts = [];
 
+        Common.saveLog('Site/request', filter, filter.id, filter._serviceId);
+
         switch (filter.origin) {
             case 'olx':
                 adverts = await Olx.getAdverts(filter, []);
@@ -19,8 +21,6 @@ class Site {
             default:
                 break;
         }
-
-        Common.saveLog('Site/request', { title: filter.title, adverts }, filter.id, filter._serviceId);
 
         return { title: filter.title, adverts };
     }
