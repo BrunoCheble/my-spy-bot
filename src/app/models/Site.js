@@ -33,16 +33,17 @@ class Site {
         let response = 0;
 
         for (let bot = 1; (bot <= 3 && response == 0); bot++) {
+            if (process.env.BOT != bot) {
+                let page = 'https://my-spy-bot' + bot + '.herokuapp.com/repeat/' + id_service + '/' + id_filter;
 
-            let page = 'https://my-spy-bot' + bot + '.herokuapp.com/repeat/' + id_service + '/' + id_filter;
+                request = await api.get(page);
 
-            request = await api.get(page);
+                if (request.status == 200 && request.data.data > 0) {
+                    response = request.data.data;
+                }
 
-            if (request.status == 200 && request.data.data > 0) {
-                response = request.data.data;
+                Common.saveLog('Site/repeat', { bot, page, status: request.status, data: request.data.data }, id_filter, id_service);
             }
-
-            Common.saveLog('Site/repeat', { bot, page, status: request.status, data: request.data.data }, id_filter, id_service);
         }
 
         return response;
