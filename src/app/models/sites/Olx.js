@@ -24,11 +24,11 @@ class Olx {
         }
 
         try {
-            if (await document.querySelectorAll(this.noResult).length === 1) {
+            const itens = document.querySelectorAll(this.results);
+
+            if (document.querySelectorAll(this.noResult).length === 1 || itens.length == 0) {
                 throw new Error(await document.querySelector('body').outerHTML);
             }
-
-            const itens = document.querySelectorAll(this.results);
 
             itens.forEach(item => responseToEmail.push(
                 Common.getResponseToEmail(
