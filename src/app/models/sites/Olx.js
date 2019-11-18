@@ -15,7 +15,7 @@ class Olx {
 
     static async getAdverts(_filter, responseToEmail) {
 
-        let { filter, id, _serviceId } = _filter;
+        let { filter, id, _serviceId, title } = _filter;
 
         const document = await Common.getResponse(this.url, 'post', filter);
 
@@ -52,6 +52,7 @@ class Olx {
             return responseToEmail;
 
         } catch (error) {
+            console.log('> ' + title + ': NO RESULTS!');
             Common.saveLog('Olx/getAdverts/noResult', { body: error.message }, id, _serviceId);
             Email.sendFail('No results OLX', error.message);
             return [];
