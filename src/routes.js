@@ -7,7 +7,7 @@ const LogController = require('./app/controllers/LogController');
 
 const routes = new Router();
 
-routes.get('/log/:id_filter', LogController.findAll);
+routes.get('/log/:id_filter/:bot', LogController.findAll);
 
 routes.get('', ServiceController.test);
 routes.get('/repeat/:id_service/:id_filter', ServiceController.repeat);

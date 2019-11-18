@@ -89,8 +89,8 @@ class ServiceController {
         console.log('Called Start - ' + interval);
         //const services = await Service.find({ interval });
 
-        await Log.deleteMany();
-        
+        await Log.deleteMany({ bot: process.env.BOT });
+
         const task = await Bot.run(interval);
         return res.json({ message: task });
     }
