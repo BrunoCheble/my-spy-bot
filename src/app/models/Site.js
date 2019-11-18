@@ -32,7 +32,7 @@ class Site {
         let request = null;
         let response = 0;
 
-        for (let bot = 1; (bot <= 3 && response == 0); bot++) {
+        for (let bot = 1; (bot <= 4 && response == 0); bot++) {
             if (process.env.BOT != bot) {
                 let page = 'https://my-spy-bot' + bot + '.herokuapp.com/repeat/' + id_service + '/' + id_filter;
 
