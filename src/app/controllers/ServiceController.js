@@ -79,7 +79,6 @@ class ServiceController {
         const filter = await Filter.findById(id_filter);
 
         await Log.deleteMany({ bot: process.env.BOT, _filterId: id_filter });
-        await Log.deleteMany({ bot: process.env.BOT, _serviceId: id_service });
 
         const data = await Bot.runFilter(service, filter, false);
         
