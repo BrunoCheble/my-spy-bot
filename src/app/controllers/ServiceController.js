@@ -73,7 +73,7 @@ class ServiceController {
     async repeat(req, res) {
 
         const { id_service, id_filter } = req.params;
-        console.log('---------------------------------------- Called Repeat - ' + id_service + ' / ' + id_filter +' ----------------------------------------');
+        console.log('Called Repeat - ' + id_service + ' / ' + id_filter +' ');
         
         const service = await Service.findById(id_service);
         const filter = await Filter.findById(id_filter);
