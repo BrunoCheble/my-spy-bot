@@ -7,22 +7,19 @@ const MercadoLivre = require('./sites/MercadoLivre');
 class Site {
 
     static async request(filter) {
-        let adverts = [];
 
         Common.saveLog('Site/request', filter, filter.id, filter._serviceId);
 
-        switch (filter.origin) {
-            case 'olx':
-                adverts = await Olx.getAdverts(filter, []);
-                break;
-            case 'ml':
-                adverts = await MercadoLivre.getAdverts(filter, []);
-                break;
-            default:
-                break;
+        const { title } = filter;
+        const sites = {
+            olx: () => Olx.getAdverts(filter, []),
+            ml: () => MercadoLivre.getAdverts(filter, []),
         }
 
-        return { title: filter.title, adverts };
+        const getAdverts = sites[filter.origin];
+        const adverts = getAdverts ? await getAdverts() : [];
+
+        return { title, adverts };
     }
 
     static async repeat(id_service, id_filter) {

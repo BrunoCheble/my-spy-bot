@@ -11,13 +11,26 @@ class Common {
 
         const api = setup({ baseURL, cache: { maxAge: 15 * 60 * 1000 } });
 
+        const types = {
+            get: () => api.get((baseURL.indexOf('?') > 0 ? '&' : '?') + parseInt(Math.random() * 10000)),
+            post: () => api.post('', qs.stringify(_filter))
+        }
+
+        const request = types[type];
+
         try {
-            const response = type == 'get' ? await api.get((baseURL.indexOf('?') > 0 ? '&' : '?') + parseInt(Math.random() * 10000)) : await api.post('', qs.stringify(_filter));
+
+            if (!request) {
+                throw new Error("The type '" + type + "' dosen't defined");
+            }
+
+            const response = await request();
             const dom = new JSDOM(response.data);
 
             return dom.window.document;
 
         } catch (error) {
+            console.log(error);
             return null;
         }
     }

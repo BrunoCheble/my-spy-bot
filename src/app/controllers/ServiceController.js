@@ -21,7 +21,8 @@ class ServiceController {
 
     async find(req, res) {
 
-        const service = await Service.findOne({ password: req.params.id.toLocaleUpperCase() });
+        const { password } = req.params;
+        const service = await Service.findOne({ password });
 
         if (service == null) {
             res.status(500);
@@ -72,13 +73,13 @@ class ServiceController {
 
     async repeat(req, res) {
 
-        const { id_service, id_filter } = req.params;
-        console.log('Called Repeat - ' + id_service + ' / ' + id_filter +' ');
+        const { _serviceId, _filterId } = req.params;
+        console.log('Called Repeat - ' + _serviceId + ' / ' + _filterId +' ');
         
-        const service = await Service.findById(id_service);
-        const filter = await Filter.findById(id_filter);
+        const service = await Service.findById(_serviceId);
+        const filter = await Filter.findById(_filterId);
 
-        await Log.deleteMany({ bot: process.env.BOT, _filterId: id_filter });
+        await Log.deleteMany({ bot: process.env.BOT, _filterId });
 
         const data = await Bot.runFilter(service, filter, false);
         
@@ -89,12 +90,11 @@ class ServiceController {
 
         const { interval } = req.headers;
         console.log('Called Start - ' + interval);
-        //const services = await Service.find({ interval });
-
         await Log.deleteMany({ bot: process.env.BOT });
 
-        const task = await Bot.run(interval);
-        return res.json({ message: task });
+        const message = await Bot.run(interval);
+
+        return res.json({ message });
     }
 }
 

@@ -22,7 +22,7 @@ class Bot {
         Common.saveLog('Bot/runFilter', { service, filter, repeat}, filter.id, service.id);
 
         const response = await Site.request(filter);
-
+        
         if(repeat && (response.adverts == null || response.adverts.length == 0)) {
             Site.repeat(service.id, filter.id);
         }

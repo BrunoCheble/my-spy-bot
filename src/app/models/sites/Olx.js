@@ -27,7 +27,7 @@ class Olx {
             const itens = document.querySelectorAll(this.results);
 
             if (document.querySelectorAll(this.noResult).length === 1 || itens.length == 0) {
-                throw new Error(await document.querySelector('body').outerHTML);
+                throw new Error(document.querySelector('body').outerHTML);
             }
 
             itens.forEach(item => responseToEmail.push(

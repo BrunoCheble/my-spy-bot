@@ -7,15 +7,15 @@ const LogController = require('./app/controllers/LogController');
 
 const routes = new Router();
 
-routes.get('/log/:id_filter/:bot', LogController.findAll);
+routes.get('/log/:_filterId/:bot', LogController.findAll);
 
 routes.get('', ServiceController.test);
-routes.get('/repeat/:id_service/:id_filter', ServiceController.repeat);
+routes.get('/repeat/:_serviceId/:_filterId', ServiceController.repeat);
 routes.post('/start', ServiceController.start);
 
 routes.post('/services', ServiceController.store);
 routes.get('/services', ServiceController.findAll);
-routes.get('/services/:id', ServiceController.find);
+routes.get('/services/:password', ServiceController.find);
 routes.get('/services/:password/:interval', ServiceController.save);
 
 routes.post('/filters', FilterController.store);
