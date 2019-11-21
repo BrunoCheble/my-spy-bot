@@ -88,7 +88,7 @@ class ServiceController {
 
     async start(req, res) {
 
-        const { interval } = req.headers;
+        const { interval } = req.body;
         console.log('Called Start - ' + interval);
         await Log.deleteMany({ bot: process.env.BOT });
 
