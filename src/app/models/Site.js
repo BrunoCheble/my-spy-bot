@@ -2,6 +2,7 @@ const { setup } = require('axios-cache-adapter');
 
 const Common = require('./sites/Common');
 const Olx = require('./sites/Olx');
+const Olxbr = require('./sites/Olxbr');
 const MercadoLivre = require('./sites/MercadoLivre');
 
 class Site {
@@ -13,6 +14,7 @@ class Site {
         const { title } = filter;
         const sites = {
             olx: () => Olx.getAdverts(filter, []),
+            olxbr: () => Olxbr.getAdverts(filter, []),
             ml: () => MercadoLivre.getAdverts(filter, []),
         }
 
