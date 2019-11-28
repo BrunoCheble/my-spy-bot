@@ -1,5 +1,6 @@
 const Filter = require('../models/Filter');
 const Advert = require('../models/Advert');
+const Log = require('../models/Log');
 
 class FilterController {
 
@@ -15,8 +16,9 @@ class FilterController {
 
     async delete(req, res) {
         const removeAdverts = await Advert.deleteMany({ _filterId: req.params.id });
+        const removeLog = await Log.deleteMany({ _filterId: req.params.id });
         const removeFilter = await Filter.deleteOne({ _id: req.params.id });
-        return res.json(removeAdverts);
+        return res.json({removeAdverts, removeLog, removeFilter});
     }
 }
 
