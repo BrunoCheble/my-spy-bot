@@ -41,7 +41,7 @@ class Olxbr {
                 )
             });
             
-            //Common.saveLog('MercadoLivre/getAdverts', { responseToEmail }, id, _serviceId);
+            Common.saveLog('Olxbr/getAdverts', { responseToEmail }, id, _serviceId);
 
             // Get next page
             let nextPage = this.getLinkNextPage(document);
@@ -65,7 +65,7 @@ class Olxbr {
 
         let page = null;
 
-        //Common.saveLog('Olxbr/getLinkNextPage', { linkNextPage }, id, null);
+        Common.saveLog('Olxbr/getLinkNextPage', { linkNextPage }, id, null);
 
         if (linkNextPage !== null) {
             page = linkNextPage;
