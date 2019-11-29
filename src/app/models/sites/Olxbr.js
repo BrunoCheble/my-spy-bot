@@ -18,9 +18,15 @@ class Olxbr {
         let { url, id, _serviceId } = filter;
         
         const document = await Common.getResponse(url, 'get');
-        const itens = await document.querySelectorAll(this.results);
-        
+
         try {
+
+            if(document == null) {
+                throw new Error('Erro no Olxbr');
+            }
+
+            const itens = await document.querySelectorAll(this.results);
+
             // No results
             if (itens == undefined || itens.length === 0 || document.querySelectorAll(this.noResult).length == 1) {
                 throw new Error(await document.querySelector('body').outerHTML);
