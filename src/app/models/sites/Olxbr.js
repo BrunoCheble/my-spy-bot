@@ -8,7 +8,7 @@ class Olxbr {
     static get results() { return '#main-ad-list .item:not(.list_native)'; }
     static get title() { return '.OLXad-list-title'; }
     static get price() { return '.OLXad-list-price'; }
-    static get thumb() { return 'img'; }
+    static get thumb() { return '.image'; }
     static get link() { return 'a'; }
     static get nextPage() { return '.item.next .link'; }
     static get noResult() { return '#main-ad-list .item:not(.list_native)'; }
@@ -29,13 +29,14 @@ class Olxbr {
             itens.forEach(item => {
 
                 let link = item.querySelector(this.link).getAttribute('href');
+                let thumb = item.querySelector(this.thumb);
                 
                 responseToEmail.push(
                     Common.getResponseToEmail(
                         item,
                         item.querySelector(this.title),
                         item.querySelector(this.price),
-                        item.querySelector(this.img),
+                        thumb !== null ? (thumb.getAttribute('data-original') != null ? thumb.getAttribute('data-original') : thumb.getAttribute('src')) : '',
                         link,
                     )
                 )

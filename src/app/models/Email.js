@@ -5,7 +5,7 @@ const Common = require('./sites/Common');
 
 class Email {
     static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
-
+        
         const data = { _filterId, _serviceId, link, last_price };
 
         const advert = await Advert.findOneAndUpdate(data, { active: true });
@@ -32,7 +32,7 @@ class Email {
             this.sendMail(
                 emails,
                 `${news_adverts.length} > ${subject}`,
-                news_adverts.map(advert => `${advert.html}<br><br>`)
+                `<table style='border-spacing: 15px;'>${news_adverts.map(advert => advert.html).join('')}</table>`
             );
         }
     }
@@ -60,6 +60,7 @@ class Email {
     }
 
     static async sendMail(to, subject, html) {
+        
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {

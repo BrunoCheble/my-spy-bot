@@ -30,15 +30,20 @@ class Olx {
                 throw new Error(document.querySelector('body').outerHTML);
             }
 
-            itens.forEach(item => responseToEmail.push(
-                Common.getResponseToEmail(
-                    item,
-                    item.querySelector(this.title),
-                    item.querySelector(this.price),
-                    item.querySelector(this.img),
-                    item.querySelector(this.link).getAttribute('href'),
+            itens.forEach(item => {
+
+                let thumb = item.querySelector(this.thumb);
+                
+                responseToEmail.push(
+                    Common.getResponseToEmail(
+                        item,
+                        item.querySelector(this.title),
+                        item.querySelector(this.price),
+                        thumb !== null ? thumb.getAttribute('src') : '',
+                        item.querySelector(this.link).getAttribute('href'),
+                    )
                 )
-            ));
+            });
 
             Common.saveLog('Olx/getAdverts', { responseToEmail }, id, _serviceId);
 

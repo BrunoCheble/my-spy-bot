@@ -35,14 +35,20 @@ class Common {
         }
     }
 
+    static getHtmlFormated(data) {
+        return `<tr><td><img width='150' src='${data.thumb}' /></td><td><a href="${data.link}"><h3>${data.title}</h3><h4>${data.price}</h4></a></td></tr>`;
+    }
+
     static getResponseToEmail(html, title, price, thumb, link) {
-        return {
-            html: html !== null ? html.outerHTML : '',
+        
+        let data = {
             title: title !== null ? title.textContent.trim() : '',
             price: price !== null ? price.textContent.trim() : '',
-            thumb: thumb !== null ? thumb.getAttribute('src') : '',
+            thumb,
             link
         };
+
+        return { ...data, html: this.getHtmlFormated(data) };
     }
 
     static async saveLog(method, body, _filterId, _serviceId) {

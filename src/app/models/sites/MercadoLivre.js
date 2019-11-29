@@ -29,12 +29,14 @@ class MercadoLivre {
                 let link = item.querySelector(this.link).getAttribute('href');
                 let page = link.slice(0, parseInt(link.indexOf("&tracking_id")));
 
+                let thumb = item.querySelector(this.thumb);
+
                 responseToEmail.push(
                     Common.getResponseToEmail(
                         item,
                         item.querySelector(this.title),
                         item.querySelector(this.price),
-                        item.querySelector(this.img),
+                        thumb !== null ? thumb.getAttribute('src') : '',
                         page,
                     )
                 )
