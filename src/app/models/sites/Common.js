@@ -7,13 +7,15 @@ class Common {
 
     static async getResponse(baseURL, type = 'get', _filter = {}) {
 
+        const { id, _serviceId, filter } = _filter;
+
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         const api = setup({ baseURL, cache: { maxAge: 15 * 60 * 1000 } });
 
         const types = {
             get: () => api.get((baseURL.indexOf('?') > 0 ? '&' : '?') + parseInt(Math.random() * 10000)),
-            post: () => api.post('', qs.stringify(_filter))
+            post: () => api.post('', qs.stringify(filter))
         }
 
         const request = types[type];
@@ -30,7 +32,7 @@ class Common {
             return dom.window.document;
 
         } catch (error) {
-            console.log(error);
+            Common.saveLog('Common/getResponse', { ..._filter, baseURL }, id, _serviceId);
             return null;
         }
     }
@@ -40,7 +42,7 @@ class Common {
     }
 
     static getResponseToEmail(html, title, price, thumb, link) {
-        
+
         let data = {
             title: title !== null ? title.textContent.trim() : '',
             price: price !== null ? price.textContent.trim() : '',
@@ -56,7 +58,7 @@ class Common {
             await Log.create({ bot: process.env.BOT, method, body, _filterId, _serviceId });
         }
         catch (erro) {
-            console.log(erro);
+            Common.saveLog('Common/saveLog', { body, method }, _filterId, _serviceId);
         }
     }
 

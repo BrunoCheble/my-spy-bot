@@ -17,7 +17,7 @@ class Olx {
 
         let { filter, id, _serviceId, title } = _filter;
 
-        const document = await Common.getResponse(this.url, 'post', filter);
+        const document = await Common.getResponse(this.url, 'post', _filter);
 
         if(document == null) {
             return [];

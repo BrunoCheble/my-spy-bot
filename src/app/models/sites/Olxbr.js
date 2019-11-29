@@ -17,7 +17,7 @@ class Olxbr {
 
         let { url, id, _serviceId } = filter;
         
-        const document = await Common.getResponse(url, 'get');
+        const document = await Common.getResponse(url, 'get', filter);
 
         try {
 
