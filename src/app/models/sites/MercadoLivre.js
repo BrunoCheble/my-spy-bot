@@ -8,7 +8,7 @@ class MercadoLivre {
     static get title() { return '.main-title'; }
     static get price() { return '.item__price'; }
     static get thumb() { return 'img'; }
-    static get link() { return '.item__info-link'; }
+    static get link() { return '.item__info-title'; }
     static get nextPage() { return '.andes-pagination__link.prefetch'; }
 
     static async getAdverts(filter, responseToEmail) {
@@ -36,7 +36,7 @@ class MercadoLivre {
                         item,
                         item.querySelector(this.title),
                         item.querySelector(this.price),
-                        thumb !== null ? thumb.getAttribute('src') : '',
+                        thumb != null ? thumb.getAttribute('src') : '',
                         page,
                     )
                 )
