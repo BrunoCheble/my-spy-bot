@@ -32,7 +32,7 @@ class Common {
             return dom.window.document;
 
         } catch (error) {
-            Common.saveLog('Common/getResponse', { ..._filter, baseURL }, id, _serviceId);
+            Common.saveLog('Common/getResponse', { ..._filter, baseURL, error }, id, _serviceId);
             return null;
         }
     }
