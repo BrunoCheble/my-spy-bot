@@ -7,7 +7,7 @@ class MercadoLivre {
     static get results() { return '.results-item'; }
     static get title() { return '.main-title'; }
     static get price() { return '.item__price'; }
-    static get thumb() { return 'img:first-child'; }
+    static get thumb() { return 'img'; }
     static get link() { return '.item__info-link'; }
     static get nextPage() { return '.andes-pagination__link.prefetch'; }
 
