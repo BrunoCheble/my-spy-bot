@@ -45,7 +45,7 @@ class MercadoLivre {
             Common.saveLog('MercadoLivre/getAdverts', { responseToEmail }, id, _serviceId);
 
             // Get next page
-            let nextPage = this.getLinkNextPage(document);
+            let nextPage = this.getLinkNextPage(document, id);
             
             if (nextPage !== null) {
                 return await this.getAdverts({ ...filter, url: nextPage }, responseToEmail);
@@ -59,11 +59,11 @@ class MercadoLivre {
         }
     }
 
-    static getLinkNextPage(document) {
+    static getLinkNextPage(document, id) {
         const next_page = document.querySelector(this.nextPage);
         
         Common.saveLog('MercadoLivre/getLinkNextPage', { next_page }, id, null);
-        
+
         return next_page !== null ? next_page.getAttribute('href') : null;
     }
 }
