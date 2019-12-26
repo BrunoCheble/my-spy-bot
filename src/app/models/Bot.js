@@ -13,7 +13,7 @@ class Bot {
         const services = await Service.find({ interval });
 
         // Só para mudar a data da última atualização
-        Service.updateMany({interval},{});        
+        Service.updateMany({interval},{interval});        
         services.map(async service => await this.task(service));
     }
 
