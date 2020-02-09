@@ -1,7 +1,7 @@
 const qs = require('qs');
 const { JSDOM } = require('jsdom');
 const { setup } = require('axios-cache-adapter');
-const Log = require('../Log');
+const Log = require('../schemas/Log');
 
 class Common {
 

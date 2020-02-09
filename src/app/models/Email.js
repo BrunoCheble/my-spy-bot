@@ -1,11 +1,10 @@
 const nodemailer = require('nodemailer');
 const { filterAsync } = require('node-filter-async');
-const Advert = require('./Advert');
-const Common = require('./sites/Common');
+const Advert = require('./schemas/Advert');
 
 class Email {
     static async newAdvert(thumb, title, link, last_price, _serviceId, _filterId) {
-        
+
         const data = { _filterId, _serviceId, link, last_price };
 
         const advert = await Advert.findOneAndUpdate(data, { active: true });
@@ -60,7 +59,7 @@ class Email {
     }
 
     static async sendMail(to, subject, html) {
-        
+
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
