@@ -6,9 +6,9 @@ const AdvertSchema = new mongoose.Schema(
         thumb: String,
         title: String,
         last_price: String,
-        active: { 
-            type: Boolean, 
-            default: true 
+        active: {
+            type: Boolean,
+            default: true,
         },
         _serviceId: {
             type: mongoose.Schema.Types.ObjectId,

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const { setup } = require('axios-cache-adapter');
 
 const Common = require('./sites/Common');
@@ -6,9 +7,7 @@ const Olxbr = require('./sites/Olxbr');
 const MercadoLivre = require('./sites/MercadoLivre');
 
 class Site {
-
     static async request(filter) {
-
         Common.saveLog('Site/request', filter, filter.id, filter._serviceId);
 
         const { title } = filter;
@@ -16,7 +15,7 @@ class Site {
             olx: () => Olx.getAdverts(filter, []),
             olxbr: () => Olxbr.getAdverts(filter, []),
             ml: () => MercadoLivre.getAdverts(filter, []),
-        }
+        };
 
         const getAdverts = sites[filter.origin];
         const adverts = getAdverts ? await getAdverts() : [];
@@ -24,28 +23,43 @@ class Site {
         return { title, adverts };
     }
 
-    static async repeat(id_service, id_filter) {
-
+    static async runRepeat(page) {
         const api = setup({ baseURL: '', cache: { maxAge: 15 * 60 * 1000 } });
-
-        let request = null;
+        const request = await api.get(page);
         let response = 0;
 
-        for (let bot = 1; (bot <= 4 && response == 0); bot++) {
-            if (process.env.BOT != bot) {
-                let page = 'https://my-spy-bot' + bot + '.herokuapp.com/repeat/' + id_service + '/' + id_filter;
-
-                request = await api.get(page);
-
-                if (request.status == 200 && request.data.data > 0) {
-                    response = request.data.data;
-                }
-
-                Common.saveLog('Site/repeat', { bot, page, status: request.status, data: request.data.data }, id_filter, id_service);
-            }
+        if (request.status === 200 && request.data.data > 0) {
+            response = request.data.data;
         }
 
-        return response;
+        return { request, response };
+    }
+
+    static async repeat(id_service, id_filter) {
+        const bots = [1, 2, 3, 4];
+        let qtd_response = 0;
+
+        bots.forEach(bot => {
+            if (process.env.BOT !== bot && qtd_response === 0) {
+                const page = `https://my-spy-bot${bot}.herokuapp.com/repeat/${id_service}/${id_filter}`;
+                const { request, response } = this.runRepeat(page);
+                qtd_response = response;
+
+                Common.saveLog(
+                    'Site/repeat',
+                    {
+                        bot,
+                        page,
+                        status: request.status,
+                        data: response,
+                    },
+                    id_filter,
+                    id_service
+                );
+            }
+        });
+
+        return qtd_response;
     }
 }
 

@@ -7,12 +7,9 @@ class Database {
 
     init() {
         mongoose.set('useFindAndModify', false);
-        mongoose.connect(
-            process.env.MONGODB,
-            {
-                useNewUrlParser: true,
-            }
-        );
+        mongoose.connect(process.env.MONGODB, {
+            useNewUrlParser: true,
+        });
     }
 }
 

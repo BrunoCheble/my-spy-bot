@@ -6,7 +6,7 @@ const ServiceSchema = new mongoose.Schema(
         password: {
             type: String,
             index: true,
-            unique: true
+            unique: true,
         },
         interval: {
             type: Number,

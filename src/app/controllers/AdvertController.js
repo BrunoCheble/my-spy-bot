@@ -1,4 +1,4 @@
-const Advert = require('../models/Advert');
+const Advert = require('../models/schemas/Advert');
 
 class AdvertController {
     async find(req, res) {
