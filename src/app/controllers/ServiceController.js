@@ -57,32 +57,21 @@ class ServiceController {
     async store(req, res) {
         const data = req.body;
 
-        let repeat = true;
-        let password = '';
-
-        while (repeat) {
-            password = Math.random()
-                .toString(36)
-                .slice(-6)
-                .toLocaleUpperCase();
-
-            repeat = this.existPassword(password);
-        }
+        const password = await Bot.generatePassword();
 
         const service = await Service.create({ ...data, password });
 
-        Email.sendMail(data.emails, 'Número do seu Robô', password);
+        Email.sendMail(
+            data.emails,
+            `Número do seu Robô: ${password}`,
+            password
+        );
 
         return res.json(service);
     }
 
-    async existPassword(password) {
-        const exist = await Service.exists({ password });
-        return exist;
-    }
-
     async test(req, res) {
-        return res.json({ working: true });
+        return res.json({ message: 'working :)' });
     }
 
     async repeat(req, res) {

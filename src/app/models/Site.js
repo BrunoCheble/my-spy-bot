@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const { setup } = require('axios-cache-adapter');
 
+const Bot = require('./schemas/Bot');
 const Common = require('./sites/Common');
 const Olx = require('./sites/Olx');
 const Olxbr = require('./sites/Olxbr');
@@ -36,19 +37,25 @@ class Site {
     }
 
     static async repeat(id_service, id_filter) {
-        const bots = [1, 2, 3, 4];
+        const bots = await Bot.find({
+            active: true,
+            _groupId: '5dd2e0f9fd3587002184602d',
+            num_bot: { $ne: process.env.BOT },
+        });
+
         let qtd_response = 0;
 
-        bots.forEach(bot => {
-            if (process.env.BOT !== bot && qtd_response === 0) {
-                const page = `https://my-spy-bot${bot}.herokuapp.com/repeat/${id_service}/${id_filter}`;
-                const { request, response } = this.runRepeat(page);
+        bots.map(async bot => {
+            if (qtd_response === 0) {
+                const base_url = bot.url.replace('/start', '/repeat');
+                const page = `${base_url}/${id_service}/${id_filter}`;
+                const { request, response } = await this.runRepeat(page);
                 qtd_response = response;
 
                 Common.saveLog(
                     'Site/repeat',
                     {
-                        bot,
+                        bot: bot.num_bot,
                         page,
                         status: request.status,
                         data: response,

@@ -42,12 +42,11 @@ class Email {
         );
 
         if (news_adverts.length > 0) {
+            const html = news_adverts.map(advert => advert.html).join('');
             this.sendMail(
                 emails,
                 `${news_adverts.length} > ${subject}`,
-                `<table style='border-spacing: 15px;'>${news_adverts
-                    .map(advert => advert.html)
-                    .join('')}</table>`
+                `<table style='border-spacing: 15px;'>${html}</table>`
             );
         }
     }

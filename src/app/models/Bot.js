@@ -27,24 +27,15 @@ class Bot {
             service.id
         );
 
-        const response = await Site.request(filter);
+        const { adverts = [], title } = await Site.request(filter);
 
-        if (
-            repeat &&
-            (response.adverts == null || response.adverts.length === 0)
-        ) {
+        if (repeat && adverts.length === 0) {
             Site.repeat(service.id, filter.id);
         } else {
-            Email.send(
-                filter.id,
-                service.id,
-                service.emails,
-                response.title,
-                response.adverts
-            );
+            Email.send(filter.id, service.id, service.emails, title, adverts);
         }
 
-        return response.adverts.length;
+        return adverts.length;
     }
 
     static async task(service) {
@@ -57,6 +48,22 @@ class Bot {
 
         // Para cada serviço, busca seus respetivos filtros;
         filters.map(filter => this.runFilter(service, filter));
+    }
+
+    static async generatePassword() {
+        const password = Math.random()
+            .toString(36)
+            .slice(-6)
+            .toLocaleUpperCase();
+
+        const repeat = await Service.exists({ password });
+
+        if (repeat) {
+            const new_password = await this.generatePassword();
+            return new_password;
+        }
+
+        return password;
     }
 }
 

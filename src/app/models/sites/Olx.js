@@ -105,9 +105,8 @@ class Olx {
 
         let page = null;
 
-        Common.saveLog('Olx/getLinkNextPage', { linkNextPage }, id, null);
-
         if (linkNextPage !== null) {
+            Common.saveLog('Olx/getLinkNextPage', { linkNextPage }, id, null);
             const search = '&page=';
 
             page = linkNextPage.slice(
