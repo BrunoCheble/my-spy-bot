@@ -9,7 +9,7 @@
   <li>O Projeto permite aceder os filtros de outras plataformas (Mercado Livre, Olx-BR)</li>
 </ul>
 
-<h3>Prints</h3>
+<h3>Prints dos resultados da busca do Robô</h3>
 <div>
   <img width="32%" src="https://img.techpowerup.org/200406/screenshot-20200406-093934-com-appmybot.jpg">
   <img width="32%" src="https://img.techpowerup.org/200406/screenshot-20200406-093914-com-appmybot.jpg">
