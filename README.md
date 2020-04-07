@@ -1,5 +1,6 @@
 <h1>Meu Robô Assistente</h1>
-<p>A motivação do desenvolvimento do Robô, foi por causa da necessidade de buscar anúncios no OLX (de acordo com o meu filtro) e ser  alertado quase imediatamente após o registo do anúncio.</p>
+<p>A motivação do desenvolvimento deste Robô, foi a necessidade de ser notificado (quase de forma instantânea) alguns anúncios no OLX do meu interesse.<br>
+    Pois no ano de 2019 (em Portugal), houve um problema de "Oferta e procura" por "Arrendamentos de imóveis", onde o primeiro a contactar o anunciante fazia muita diferença em conseguir o imóvel.</p>
 
 <h3>Funcionalidades</h3>
 <ul>
