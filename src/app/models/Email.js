@@ -84,10 +84,9 @@ class Email {
         const api = setup({ baseURL, cache: { maxAge: 15 * 60 * 1000 } });
 
         console.log(baseURL);
-        console.log({ to, subject, body });
+        console.log({ to, subject });
 
-        api.post('', { to, subject, body });
-        //api.post('', qs.stringify({ to, subject, body }));
+        api.post('', qs.stringify({ to, subject, 'teste' }));
 
         /*
         const transporter = nodemailer.createTransport({
