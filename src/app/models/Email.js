@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const qs = require('qs');
 const { filterAsync } = require('node-filter-async');
 const { setup } = require('axios-cache-adapter');
 const Advert = require('./schemas/Advert');
