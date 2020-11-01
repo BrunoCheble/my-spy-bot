@@ -86,7 +86,7 @@ class Email {
         console.log(baseURL);
         console.log({ to, subject });
 
-        api.post('', qs.stringify({ to, subject, 'teste' }));
+        api.post('', qs.stringify({ to, subject, body: 'teste' }));
 
         /*
         const transporter = nodemailer.createTransport({
