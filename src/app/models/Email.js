@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const { filterAsync } = require('node-filter-async');
+const { setup } = require('axios-cache-adapter');
 const Advert = require('./schemas/Advert');
 
 class Email {
@@ -77,7 +78,14 @@ class Email {
         return result;
     }
 
-    static async sendMail(to, subject, html) {
+    static async sendMail(to, subject, body) {
+
+        const baseURL = process.env.URL_API_POSTMAN;
+        const api = setup({ baseURL, cache: { maxAge: 15 * 60 * 1000 } });
+
+        api.post('', qs.stringify({ to, subject, body }));
+
+        /*
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -101,6 +109,7 @@ class Email {
                 }
             }
         );
+        */
     }
 
     static async sendFail(title, message) {
